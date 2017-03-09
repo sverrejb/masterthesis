@@ -28,8 +28,7 @@ for gen in range(NGEN):
     for fit, ind in zip(fits, offspring):
         ind.fitness.values = fit
     population = toolbox.select(offspring, k=len(population))
-    print(population[0])
 top10 = tools.selBest(population, k=10)
 
 for individual in top10:
-    print(individual)
+    print(sum(individual))
