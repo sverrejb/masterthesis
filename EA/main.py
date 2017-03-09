@@ -40,11 +40,11 @@ def evaluate_deck(individual):
     return (sum(individual), )
 
 
-def initIndividual(icls, content):
+def init_individual(icls, content):
     return icls(content)
 
 
-def initPopulation(pcls, ind_init, list_of_decks):
+def init_population(pcls, ind_init, list_of_decks):
     return pcls(ind_init(c) for c in list_of_decks)
 
 
@@ -52,10 +52,10 @@ first_gen_decks = generate_first_generation_decks(CARD_POOL)
 
 toolbox = base.Toolbox()
 
-toolbox.register("individual_guess", initIndividual, creator.Individual)
-toolbox.register("population_guess", initPopulation, list, toolbox.individual_guess, first_gen_decks)
+toolbox.register("individual_guess", init_individual, creator.Individual)
+toolbox.register("card_population", init_population, list, toolbox.individual_guess, first_gen_decks)
 
-population = toolbox.population_guess()
+population = toolbox.card_population()
 
 
 toolbox.register("evaluate", evaluate_deck)
@@ -64,9 +64,12 @@ toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
 
+NUMBER_OF_GENERATIONS = 100
 
-NGEN = 1000
-for gen in range(NGEN):
+# TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+
+
+for gen in range(NUMBER_OF_GENERATIONS):
     offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=1)
     fits = toolbox.map(toolbox.evaluate, offspring)
     for fit, ind in zip(fits, offspring):
