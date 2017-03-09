@@ -5,8 +5,6 @@ creator.create("FitnessMax", base.Fitness, weights=(1.0, 1.0))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
-
-#LIST OF CARDS
 CARD_POOL = []
 
 decks = [[1, 2, 3],
@@ -15,7 +13,24 @@ decks = [[1, 2, 3],
          ]
 
 
+with open('../AER-POOL-1.txt', 'r') as file:
+    card_list = []
+    for line in file:
+        card_list.append(line.strip())
+
+for card in card_list:
+    card = card.split(' ')
+    number_of_card = int(card[0])
+    name_of_card = " ".join(card[1:])
+    for i in range(number_of_card):
+        CARD_POOL.append(name_of_card)
+
+for card in CARD_POOL:
+    print(card)
+
+
 def generate_first_generation_decks(card_pool):
+    pass
 
 
 def initIndividual(icls, content):
