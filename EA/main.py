@@ -1,35 +1,31 @@
 from deap import base
 from deap import creator
+from cards import read_card_pool
+
+from pprint import pprint
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0, 1.0))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
-CARD_POOL = []
+CARD_POOL = {}
 
 decks = [[1, 2, 3],
          [4, 5, 6],
          [7, 8, 9]
          ]
 
+CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 
-with open('../AER-POOL-1.txt', 'r') as file:
-    card_list = []
-    for line in file:
-        card_list.append(line.strip())
-
-for card in card_list:
-    card = card.split(' ')
-    number_of_card = int(card[0])
-    name_of_card = " ".join(card[1:])
-    for i in range(number_of_card):
-        CARD_POOL.append(name_of_card)
-
-for card in CARD_POOL:
-    print(card)
+pprint(CARD_POOL)
 
 
 def generate_first_generation_decks(card_pool):
+    pass
+
+
+# must return fitness value as tuple eg. (31, )
+def evaluate(individual):
     pass
 
 
