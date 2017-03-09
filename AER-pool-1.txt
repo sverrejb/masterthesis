@@ -1,4 +1,3 @@
-Sideboard
 1 Aether Chaser
 1 Aether Herder
 2 Aethertide Whale
@@ -7,7 +6,6 @@ Sideboard
 1 Audacious Infiltrator
 2 Augmenting Automaton
 1 Bastion Enforcer
-1 Black Spindown Life Counter
 1 Built to Last
 1 Chandra's Revolution
 1 Cloudblazer
@@ -17,8 +15,6 @@ Sideboard
 2 Conviction
 1 Daring Demolition
 1 Dawnfeather Eagle
-1 Deck Box
-1 Deckbuilding Advice Insert
 1 Decommission
 1 Dhund Operative
 1 Diabolic Tutor
@@ -33,7 +29,6 @@ Sideboard
 3 Ghirapur Osprey
 1 Gifted Aetherborn
 2 Glint-Sleeve Artisan
-1 Gremlin
 1 Harsh Scrutiny
 1 Herald of Anguish
 1 Hinterland Drake
@@ -47,31 +42,25 @@ Sideboard
 2 Leave in the Dust
 1 Live Fast
 1 Monstrous Onslaught
-5 Mountain
 1 Natural Obsolescence
 1 Negate
 2 Night Market Guard
 1 Night Market Lookout
 1 Oath of Ajani
-1 Plains
 1 Prakhata Pillar-Bug
-1 Ragavan
 1 Reckless Fireweaver
 1 Renegade Map
 1 Renegade Rallier
-1 Renegade Sticker
 1 Renegade Wheelsmith
 1 Reservoir Walker
 1 Reverse Engineer
 1 Revoke Privileges
 1 Sage of Shaila's Claim
 1 Select for Inspection
-1 Servo Token
 2 Shielded Aether Thief
 1 Shock
 1 Skyship Plunderer
 1 Subtle Strike
-3 Tip/Marketing Card
 1 Treasure Keeper
 1 Trophy Mage
 1 Universal Solvent
