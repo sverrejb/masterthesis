@@ -1,0 +1,79 @@
+1 Aethertow
+1 Agony Warp
+1 Ancient Grudge
+2 Arachnus Web
+1 Avacyn's Pilgrim
+1 Bone Splinters
+1 Broodmate Dragon
+1 Burning-Tree Emissary
+1 Call of the Conclave
+1 Call of the Herd
+1 Chandra's Outrage
+1 Cower in Fear
+1 Damnation
+2 Death-Hood Cobra
+1 Dimir Guildgate
+2 Dragon Fodder
+1 Dregscape Zombie
+1 Dynacharge
+1 Evil Twin
+1 Eyes in the Skies
+2 Falkenrath Noble
+1 Familiar's Ruse
+1 Fists of Ironwood
+1 Forbidden Alchemy
+2 Ghostly Flicker
+1 Gift of Orzhova
+3 Gnawing Zombie
+1 Goblin Electromancer
+1 Golgari Guildgate
+1 Golgari Rotwurm
+1 Graceful Reprieve
+1 Grisly Spectacle
+1 Grixis Slavedriver
+1 Gruul Guildgate
+2 Harmonize
+1 Izzet Charm
+1 Kor Skyfisher
+1 Kraken Hatchling
+1 Lone Missionary
+1 Magma Jet
+1 Mudbutton Torchrunner
+1 Mystic Genesis
+1 Night Terrors
+1 Ogre Jailbreaker
+1 Orzhov Guildgate
+1 Path to Exile
+1 Phantasmal Image
+1 Pit Keeper
+1 Pyrewild Shaman
+2 Rakdos Guildgate
+1 Rakdos Signet
+1 Ranger of Eos
+1 Recover
+1 Revive
+1 Rewind
+1 Rootborn Defenses
+1 Rubblebelt Maaka
+1 Savage Lands
+1 Scorched Rusalka
+1 Sea Gate Oracle
+2 Shimmering Grotto
+1 Simic Guildgate
+1 Sin Collector
+2 Slime Molding
+1 Soul Manipulation
+1 Soul Warden
+1 Spell Pierce
+1 Sundering Growth
+1 Sunhome Guildmage
+1 Sylvan Ranger
+1 Tattermunge Witch
+1 Thunderous Wrath
+1 Thundersong Trumpeter
+1 Traitorous Instinct
+1 Urban Evolution
+1 Vampire Aristocrat
+1 Vital Splicer
+1 Wall of Denial
+1 Wing Splicer
