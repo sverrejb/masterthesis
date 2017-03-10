@@ -16,6 +16,7 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 POPSIZE = 10
 DECKSIZE = 40
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
+CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = '/Users/sverre/Library/Application Support/Forge/decks/constructed/'
 
 
@@ -44,18 +45,38 @@ def generate_first_generation_decks(card_pool):
     return population
 
 
-# must return fitness value as tuple eg. (31, )
+def mutate_deck(individual):
+    print(individual)
+    size = len(individual)
+    mutation_site = randint(0, size)
+    mutated = False
+    while not mutated:
+        new_gene = randint(0, CARD_POOL_SIZE)
+        gene_limit = CARD_POOL[new_gene][1]
+        if individual.count(new_gene) < gene_limit:
+            individual[mutation_site] = new_gene
+            mutated = True
+    print(individual)
+    return individual,  # MUST RETURN TUPLE
+
+
+def build_cmd(candidate_name, opponent_name):
+    return ['java', '-Xmx1024m', '-jar',
+            'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
+            '-d', candidate_name, opponent_name,
+            '-n', '10', '-f', 'sealed']
+
+
 def evaluate_deck(individual):
     decklist = genome_to_decklist(individual)
-    with open(CARD_DIRECTORY+'candidate.dck', 'w') as file:
+    filename = 'candidate.dck'
+    opponent = 'Merfolk.dck'
+    with open(CARD_DIRECTORY+filename, 'w') as file:
         file.write('[metadata]\nName=candidate\n[Main]\n')
         for card in decklist:
             file.write(card+'\n')
 
-    cmd = ['java', '-Xmx1024m', '-jar',
-           'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
-           '-d', 'candidate.dck', 'Merfolk.dck',
-           '-n', '10', '-f', 'sealed']
+    cmd = build_cmd(filename, opponent)
 
     p = subprocess.Popen(cmd, cwd='/Users/sverre/workspace/masteroppgave/forgeGUI', stdout=subprocess.PIPE)
     for line in p.stdout:
@@ -65,7 +86,7 @@ def evaluate_deck(individual):
     p.wait()
     fitness = int(result[3])
     print(fitness)
-    return (fitness, )
+    return fitness,  # MUST BE TUPLE!
 
 
 def init_individual(icls, content):
@@ -83,12 +104,12 @@ toolbox = base.Toolbox()
 toolbox.register("individual_guess", init_individual, creator.Individual)
 toolbox.register("card_population", init_population, list, toolbox.individual_guess, first_gen_decks)
 
-population = toolbox.card_population()
+
 
 
 toolbox.register("evaluate", evaluate_deck)
 toolbox.register("mate", tools.cxTwoPoint)
-toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
+toolbox.register("mutate", mutate_deck)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
 
@@ -96,10 +117,10 @@ NUMBER_OF_GENERATIONS = 100
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
-#evaluate_deck(first_gen_decks[0])
+population = toolbox.card_population()
 
 for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0)
+    offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.5)
     fits = toolbox.map(toolbox.evaluate, offspring)
     print(list(fits))
     for fit, ind in zip(fits, offspring):
