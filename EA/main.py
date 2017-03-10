@@ -15,7 +15,14 @@ POPSIZE = 10
 DECKSIZE = 40
 CARD_POOL = {}
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
+CARD_DIRECTORY = '/Users/sverre/Library/Application Support/Forge/decks/constructed/'
 
+
+def genome_to_decklist(individual):
+    deck_list = []
+    for c in individual:
+        deck_list.append(CARD_POOL[c][0])
+    return deck_list
 
 def generate_individual(card_pool):
     individual = []
@@ -37,7 +44,15 @@ def generate_first_generation_decks(card_pool):
 
 # must return fitness value as tuple eg. (31, )
 def evaluate_deck(individual):
-    return (sum(individual), )
+    # lag decklist for individet
+    decklist = genome_to_decklist(individual)
+    with open(CARD_DIRECTORY+'candidate.dck', 'w') as file:
+        file.write('[metadata]\nName=candidate\n[Main]\n')
+        for card in decklist:
+            file.write(card+'\n')
+    # skriv decklist til fil
+    # test
+    return 1
 
 
 def init_individual(icls, content):
@@ -68,14 +83,16 @@ NUMBER_OF_GENERATIONS = 100
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
+evaluate_deck(first_gen_decks[0])
 
-for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=1)
-    fits = toolbox.map(toolbox.evaluate, offspring)
-    for fit, ind in zip(fits, offspring):
-        ind.fitness.values = fit
-    population = toolbox.select(offspring, k=len(population))
-
-top10 = tools.selBest(population, k=10)
-for individual in top10:
-    print(individual)
+# for gen in range(NUMBER_OF_GENERATIONS):
+#     offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=1)
+#     fits = toolbox.map(toolbox.evaluate, offspring)
+#     print(list(fits))
+#     for fit, ind in zip(fits, offspring):
+#         ind.fitness.values = fit
+#     population = toolbox.select(offspring, k=len(population))
+#
+# top10 = tools.selBest(population, k=10)
+# for individual in top10:
+#     print(individual)
