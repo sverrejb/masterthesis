@@ -7,6 +7,7 @@ from deap import base
 from deap import creator
 from deap import tools
 from deap import algorithms
+import time
 
 import subprocess
 
@@ -66,10 +67,11 @@ def build_cmd(candidate_name, opponent_name):
     return ['java', '-Xmx1024m', '-jar',
             'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
             '-d', candidate_name, opponent_name,
-            '-n', '10', '-f', 'sealed']
+            '-n', '80', '-f', 'sealed', '-q']
 
 
 def evaluate_decks(offspring):
+    start = time.time()
     jobs = []
     pipe_list = []
     for i in range(len(offspring)):
@@ -84,6 +86,7 @@ def evaluate_decks(offspring):
         proc.join()
     result_list = [x.recv() for x in pipe_list]
     print(result_list)
+    print(time.time() - start)
     return [(0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,)]
 
 
@@ -105,8 +108,8 @@ def evaluate_deck(individual, num, send_end):
             result = line.split(' ')
     p.wait()
     fitness = int(result[3])
-    print(fitness)
-    return fitness,  # MUST BE TUPLE!
+    send_end.send(fitness)
+    return
 
 
 def init_individual(icls, content):
