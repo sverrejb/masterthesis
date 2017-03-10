@@ -105,8 +105,6 @@ toolbox.register("individual_guess", init_individual, creator.Individual)
 toolbox.register("card_population", init_population, list, toolbox.individual_guess, first_gen_decks)
 
 
-
-
 toolbox.register("evaluate", evaluate_deck)
 toolbox.register("mate", tools.cxTwoPoint)
 toolbox.register("mutate", mutate_deck)
