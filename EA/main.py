@@ -46,24 +46,26 @@ def generate_first_generation_decks(card_pool):
 
 # must return fitness value as tuple eg. (31, )
 def evaluate_deck(individual):
-    # lag decklist for individet
     decklist = genome_to_decklist(individual)
     with open(CARD_DIRECTORY+'candidate.dck', 'w') as file:
         file.write('[metadata]\nName=candidate\n[Main]\n')
         for card in decklist:
             file.write(card+'\n')
 
-    cmd = ['java', '-Xmx1024m', '-jar', 'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim', '-d', 'candidate.dck', 'Merfolk.dck', '-n', '10', '-f', 'sealed', '>', 'log.txt']
+    cmd = ['java', '-Xmx1024m', '-jar',
+           'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
+           '-d', 'candidate.dck', 'Merfolk.dck',
+           '-n', '10', '-f', 'sealed']
 
     p = subprocess.Popen(cmd, cwd='/Users/sverre/workspace/masteroppgave/forgeGUI', stdout=subprocess.PIPE)
     for line in p.stdout:
-        line = line.decode("utf-8")
+        line = line.decode("utf-8").strip()
         if 'Match result' in line:
-            print(line)
+            result = line.split(' ')
     p.wait()
-    print(p.returncode)
-
-    return 1
+    fitness = int(result[3])
+    print(fitness)
+    return (fitness, )
 
 
 def init_individual(icls, content):
@@ -94,16 +96,16 @@ NUMBER_OF_GENERATIONS = 100
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
-evaluate_deck(first_gen_decks[0])
+#evaluate_deck(first_gen_decks[0])
 
-# for gen in range(NUMBER_OF_GENERATIONS):
-#     offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=1)
-#     fits = toolbox.map(toolbox.evaluate, offspring)
-#     print(list(fits))
-#     for fit, ind in zip(fits, offspring):
-#         ind.fitness.values = fit
-#     population = toolbox.select(offspring, k=len(population))
-#
-# top10 = tools.selBest(population, k=10)
-# for individual in top10:
-#     print(individual)
+for gen in range(NUMBER_OF_GENERATIONS):
+    offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0)
+    fits = toolbox.map(toolbox.evaluate, offspring)
+    print(list(fits))
+    for fit, ind in zip(fits, offspring):
+        ind.fitness.values = fit
+    population = toolbox.select(offspring, k=len(population))
+
+top10 = tools.selBest(population, k=10)
+for individual in top10:
+    print(individual)
