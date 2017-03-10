@@ -139,14 +139,16 @@ NUMBER_OF_GENERATIONS = 100
 
 population = toolbox.card_population()
 
-for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.5)
-    fits = toolbox.evaluate(offspring)
-    print(list(fits))
-    for fit, ind in zip(fits, offspring):
-        ind.fitness.values = fit
-    population = toolbox.select(offspring, k=len(population))
+print(evaluate_decks(population))
 
-top10 = tools.selBest(population, k=10)
-for individual in top10:
-    print(individual)
+# for gen in range(NUMBER_OF_GENERATIONS):
+#     offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.5)
+#     fits = toolbox.evaluate(offspring)
+#     print(list(fits))
+#     for fit, ind in zip(fits, offspring):
+#         ind.fitness.values = fit
+#     population = toolbox.select(offspring, k=len(population))
+#
+# top10 = tools.selBest(population, k=10)
+# for individual in top10:
+#     print(individual)
