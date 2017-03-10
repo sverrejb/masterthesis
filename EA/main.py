@@ -6,6 +6,8 @@ from deap import creator
 from deap import tools
 from deap import algorithms
 
+import subprocess
+
 from pprint import pprint
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -13,7 +15,6 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
 DECKSIZE = 40
-CARD_POOL = {}
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_DIRECTORY = '/Users/sverre/Library/Application Support/Forge/decks/constructed/'
 
@@ -23,6 +24,7 @@ def genome_to_decklist(individual):
     for c in individual:
         deck_list.append(CARD_POOL[c][0])
     return deck_list
+
 
 def generate_individual(card_pool):
     individual = []
@@ -50,8 +52,17 @@ def evaluate_deck(individual):
         file.write('[metadata]\nName=candidate\n[Main]\n')
         for card in decklist:
             file.write(card+'\n')
-    # skriv decklist til fil
-    # test
+
+    cmd = ['java', '-Xmx1024m', '-jar', 'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim', '-d', 'candidate.dck', 'Merfolk.dck', '-n', '10', '-f', 'sealed', '>', 'log.txt']
+
+    p = subprocess.Popen(cmd, cwd='/Users/sverre/workspace/masteroppgave/forgeGUI', stdout=subprocess.PIPE)
+    for line in p.stdout:
+        line = line.decode("utf-8")
+        if 'Match result' in line:
+            print(line)
+    p.wait()
+    print(p.returncode)
+
     return 1
 
 
