@@ -48,7 +48,6 @@ def generate_first_generation_decks(card_pool):
 
 
 def mutate_deck(individual):
-    print(individual)
     size = len(individual)
     mutation_site = randint(0, size - 1)
     mutated = False
@@ -58,7 +57,6 @@ def mutate_deck(individual):
         if individual.count(new_gene) < gene_limit:
             individual[mutation_site] = new_gene
             mutated = True
-    print(individual)
     return individual,  # MUST RETURN TUPLE
 
 
@@ -122,7 +120,7 @@ NUMBER_OF_GENERATIONS = 10
 population = toolbox.card_population()
 
 for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.5)
+    offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.2)
     fits = toolbox.map(toolbox.evaluate, offspring)
     print(list(fits))
     for fit, ind in zip(fits, offspring):
