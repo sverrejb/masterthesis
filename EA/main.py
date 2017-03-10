@@ -1,5 +1,7 @@
 from random import randint
 
+import multiprocessing
+
 from cards import read_card_pool
 from deap import base
 from deap import creator
@@ -67,9 +69,27 @@ def build_cmd(candidate_name, opponent_name):
             '-n', '10', '-f', 'sealed']
 
 
-def evaluate_deck(individual):
+def evaluate_decks(offspring):
+    jobs = []
+    pipe_list = []
+    for i in range(len(offspring)):
+        individual = offspring[i]
+        recv_end, send_end = multiprocessing.Pipe(False)
+        p = multiprocessing.Process(target=evaluate_deck, args=(individual, i, send_end))
+        jobs.append(p)
+        pipe_list.append(recv_end)
+        p.start()
+
+    for proc in jobs:
+        proc.join()
+    result_list = [x.recv() for x in pipe_list]
+    print(result_list)
+    return [(0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,)]
+
+
+def evaluate_deck(individual, num, send_end):
     decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
+    filename = str(num)+'candidate.dck'
     opponent = 'Merfolk.dck'
     with open(CARD_DIRECTORY+filename, 'w') as file:
         file.write('[metadata]\nName=candidate\n[Main]\n')
@@ -107,7 +127,7 @@ toolbox.register("card_population", init_population, list, toolbox.individual_gu
 
 
 
-toolbox.register("evaluate", evaluate_deck)
+toolbox.register("evaluate", evaluate_decks)
 toolbox.register("mate", tools.cxTwoPoint)
 toolbox.register("mutate", mutate_deck)
 toolbox.register("select", tools.selTournament, tournsize=3)
@@ -121,7 +141,7 @@ population = toolbox.card_population()
 
 for gen in range(NUMBER_OF_GENERATIONS):
     offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.5)
-    fits = toolbox.map(toolbox.evaluate, offspring)
+    fits = toolbox.evaluate(offspring)
     print(list(fits))
     for fit, ind in zip(fits, offspring):
         ind.fitness.values = fit
