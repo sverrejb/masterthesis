@@ -5,6 +5,7 @@ from deap import base
 from deap import creator
 from deap import tools
 from deap import algorithms
+import config
 
 import subprocess
 
@@ -17,7 +18,8 @@ POPSIZE = 10
 DECKSIZE = 40
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
-CARD_DIRECTORY = '/Users/sverre/Library/Application Support/Forge/decks/constructed/'
+CARD_DIRECTORY = config.CARD_DIR
+FORGE_PATH = config.FORGE_DIR
 
 
 def genome_to_decklist(individual):
@@ -48,10 +50,10 @@ def generate_first_generation_decks(card_pool):
 def mutate_deck(individual):
     print(individual)
     size = len(individual)
-    mutation_site = randint(0, size)
+    mutation_site = randint(0, size - 1)
     mutated = False
     while not mutated:
-        new_gene = randint(0, CARD_POOL_SIZE)
+        new_gene = randint(0, CARD_POOL_SIZE - 1)
         gene_limit = CARD_POOL[new_gene][1]
         if individual.count(new_gene) < gene_limit:
             individual[mutation_site] = new_gene
@@ -78,7 +80,7 @@ def evaluate_deck(individual):
 
     cmd = build_cmd(filename, opponent)
 
-    p = subprocess.Popen(cmd, cwd='/Users/sverre/workspace/masteroppgave/forgeGUI', stdout=subprocess.PIPE)
+    p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
     for line in p.stdout:
         line = line.decode("utf-8").strip()
         if 'Match result' in line:
@@ -113,7 +115,7 @@ toolbox.register("mutate", mutate_deck)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
 
-NUMBER_OF_GENERATIONS = 100
+NUMBER_OF_GENERATIONS = 10
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
