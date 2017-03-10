@@ -115,6 +115,8 @@ NUMBER_OF_GENERATIONS = 10
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
+# TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
+
 population = toolbox.card_population()
 
 for gen in range(NUMBER_OF_GENERATIONS):
