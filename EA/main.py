@@ -1,17 +1,13 @@
+import multiprocessing
+import subprocess
+import time
 from random import randint
 
-import multiprocessing
-
 from cards import read_card_pool
+from deap import algorithms
 from deap import base
 from deap import creator
 from deap import tools
-from deap import algorithms
-import time
-
-import subprocess
-
-from pprint import pprint
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -49,7 +45,6 @@ def generate_first_generation_decks(card_pool):
 
 
 def mutate_deck(individual):
-    print(individual)
     size = len(individual)
     mutation_site = randint(0, size)
     mutated = False
@@ -59,7 +54,6 @@ def mutate_deck(individual):
         if individual.count(new_gene) < gene_limit:
             individual[mutation_site] = new_gene
             mutated = True
-    print(individual)
     return individual,  # MUST RETURN TUPLE
 
 
@@ -67,7 +61,7 @@ def build_cmd(candidate_name, opponent_name):
     return ['java', '-Xmx1024m', '-jar',
             'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
             '-d', candidate_name, opponent_name,
-            '-n', '80', '-f', 'sealed', '-q']
+            '-n', '10', '-f', 'sealed', '-q']
 
 
 def evaluate_decks(offspring):
@@ -87,17 +81,17 @@ def evaluate_decks(offspring):
     result_list = [x.recv() for x in pipe_list]
     print(result_list)
     print(time.time() - start)
-    return [(0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,), (0,)]
+    return [(x,) for x in result_list]
 
 
 def evaluate_deck(individual, num, send_end):
     decklist = genome_to_decklist(individual)
-    filename = str(num)+'candidate.dck'
+    filename = str(num) + 'candidate.dck'
     opponent = 'Merfolk.dck'
-    with open(CARD_DIRECTORY+filename, 'w') as file:
+    with open(CARD_DIRECTORY + filename, 'w') as file:
         file.write('[metadata]\nName=candidate\n[Main]\n')
         for card in decklist:
-            file.write(card+'\n')
+            file.write(card + '\n')
 
     cmd = build_cmd(filename, opponent)
 
@@ -127,31 +121,26 @@ toolbox = base.Toolbox()
 toolbox.register("individual_guess", init_individual, creator.Individual)
 toolbox.register("card_population", init_population, list, toolbox.individual_guess, first_gen_decks)
 
-
-
-
 toolbox.register("evaluate", evaluate_decks)
 toolbox.register("mate", tools.cxTwoPoint)
 toolbox.register("mutate", mutate_deck)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
-
-NUMBER_OF_GENERATIONS = 100
+NUMBER_OF_GENERATIONS = 10
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
 population = toolbox.card_population()
 
-print(evaluate_decks(population))
+# print(evaluate_decks(population))
 
-# for gen in range(NUMBER_OF_GENERATIONS):
-#     offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.5)
-#     fits = toolbox.evaluate(offspring)
-#     print(list(fits))
-#     for fit, ind in zip(fits, offspring):
-#         ind.fitness.values = fit
-#     population = toolbox.select(offspring, k=len(population))
-#
-# top10 = tools.selBest(population, k=10)
-# for individual in top10:
-#     print(individual)
+for gen in range(NUMBER_OF_GENERATIONS):
+    offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.2)
+    fits = toolbox.evaluate(offspring)
+    print(list(fits))
+    for fit, ind in zip(fits, offspring):
+        ind.fitness.values = fit
+    population = toolbox.select(offspring, k=len(population))
+top10 = tools.selBest(population, k=10)
+for individual in top10:
+    print(individual)
