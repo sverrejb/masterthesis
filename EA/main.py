@@ -9,6 +9,8 @@ import config
 
 import subprocess
 
+import time
+
 from pprint import pprint
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -78,13 +80,15 @@ def evaluate_deck(individual):
 
     cmd = build_cmd(filename, opponent)
 
+    number_of_hits = 0
+
     p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
     for line in p.stdout:
         line = line.decode("utf-8").strip()
-        if 'Match result' in line:
-            result = line.split(' ')
+        if 'damage to Ai(2' in line:
+            number_of_hits += 1
     p.wait()
-    fitness = int(result[3])
+    fitness = number_of_hits
     print(fitness)
     return fitness,  # MUST BE TUPLE!
 
@@ -120,12 +124,15 @@ NUMBER_OF_GENERATIONS = 10
 population = toolbox.card_population()
 
 for gen in range(NUMBER_OF_GENERATIONS):
+    start = time.time()
     offspring = algorithms.varAnd(population, toolbox, cxpb=0.0, mutpb=0.2)
     fits = toolbox.map(toolbox.evaluate, offspring)
     print(list(fits))
     for fit, ind in zip(fits, offspring):
         ind.fitness.values = fit
     population = toolbox.select(offspring, k=len(population))
+
+    print(time.time() - start)
 
 top10 = tools.selBest(population, k=10)
 for individual in top10:
