@@ -6,6 +6,8 @@ from random import randint
 from deap import algorithms
 from deap import base
 from deap import creator
+
+import datetime
 from deap import tools
 
 import config
@@ -168,13 +170,10 @@ start_time = time.time()
 top1_list = []
 
 for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.02)
+    offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.2)
     fits = list(toolbox.map(toolbox.evaluate, offspring))
     print(list(fits))
-    print(len(fits))
-    print(len(offspring))
     for fit, ind in zip(fits, offspring):
-        print(fit)
         ind.fitness.values = fit
     population = toolbox.select(offspring, k=len(population))
     top1 = tools.selBest(population, k=1)
@@ -192,3 +191,10 @@ for generation in top1_list:
         fitness_list.append(ind.fitness.values)
 print(fitness_list)
 print(type(fitness_list[0]))
+
+image_name = str(datetime.datetime.now()) + '.png'
+
+plt.plot([x[0] for x in fitness_list])
+plt.ylabel('some numbers')
+plt.savefig(image_name)
+
