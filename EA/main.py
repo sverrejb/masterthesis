@@ -11,13 +11,16 @@ from deap import tools
 import config
 from cards import read_card_pool
 
+import matplotlib.pyplot as plt
+
+
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 10
-MATCHES_PER_OPPONENT = '5'
+NUMBER_OF_GENERATIONS = 1
+MATCHES_PER_OPPONENT = '1'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -87,38 +90,38 @@ def evaluate_deck_by_damage(individual):
             line = line.decode("utf-8").strip()
             if 'combat damage to Ai(2' in line:
                 hit_event = line.split(' ')
-                print(hit_event)
                 damage_index = hit_event.index('deals') + 1
                 damage = int(hit_event[damage_index])
                 fitness += damage
 
         p.wait()
+    print('fitness:', fitness)
     return fitness,  # MUST BE TUPLE!
 
 
-def evaluate_deck(individual):
-    decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
-    # opponent = 'Merfolk.dck'
-    fitness = 0
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    for opponent in opponents:
-        with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write(DECKLIST_HEADER)
-            for card in decklist:
-                file.write(card + '\n')
-
-        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-
-        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-        for line in p.stdout:
-            line = line.decode("utf-8").strip()
-            if 'Match result' in line:
-                result = line.split(' ')
-        p.wait()
-        fitness += int(result[3])
-    # print(fitness)
-    return fitness,  # MUST BE TUPLE!
+# def evaluate_deck(individual):
+#     decklist = genome_to_decklist(individual)
+#     filename = 'candidate.dck'
+#     # opponent = 'Merfolk.dck'
+#     fitness = 0
+#     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
+#     for opponent in opponents:
+#         with open(CARD_DIRECTORY + filename, 'w') as file:
+#             file.write(DECKLIST_HEADER)
+#             for card in decklist:
+#                 file.write(card + '\n')
+#
+#         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
+#
+#         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
+#         for line in p.stdout:
+#             line = line.decode("utf-8").strip()
+#             if 'Match result' in line:
+#                 result = line.split(' ')
+#         p.wait()
+#         fitness += int(result[3])
+#     # print(fitness)
+#     return fitness,  # MUST BE TUPLE!
 
 
 def init_individual(icls, content):
@@ -155,17 +158,32 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
 
 population = toolbox.card_population()
-tid = time.time()
+start_time = time.time()
+
+top1_list = []
+
 for gen in range(NUMBER_OF_GENERATIONS):
     offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.02)
-    fits = toolbox.map(toolbox.evaluate, offspring)
+    fits = list(toolbox.map(toolbox.evaluate, offspring))
     print(list(fits))
+    print(len(fits))
+    print(len(offspring))
     for fit, ind in zip(fits, offspring):
+        print(fit)
         ind.fitness.values = fit
     population = toolbox.select(offspring, k=len(population))
+    top1 = tools.selBest(population, k=1)
+    top1_list.append(top1)
 
 top10 = tools.selBest(population, k=10)
-for individual in top10:
-    print(individual)
+for i in range(len(top10)):
+    print(i, top10[i].fitness.values)
 
-print(time.time() - tid)
+print(time.time() - start_time)
+
+fitness_list = []
+for generation in top1_list:
+    for ind in generation:
+        fitness_list.append(ind.fitness.values)
+print(fitness_list)
+print(type(fitness_list[0]))
