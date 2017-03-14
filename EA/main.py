@@ -121,8 +121,6 @@ toolbox.register("individual_guess", init_individual, creator.Individual)
 toolbox.register("card_population", init_population, list, toolbox.individual_guess, first_gen_decks)
 
 
-
-
 toolbox.register("evaluate", evaluate_deck)
 toolbox.register("mate", mate_individuals)
 toolbox.register("mutate", mutate_deck)
@@ -132,6 +130,8 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 
 
 # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+
+# TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
 
 population = toolbox.card_population()
 tid=time.time()
