@@ -17,11 +17,12 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 POPSIZE = 10
 DECKSIZE = 40
 NUMBER_OF_GENERATIONS = 20
-MATCHES_PER_OPPONENT = "10"
+MATCHES_PER_OPPONENT = '10'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
 FORGE_PATH = config.FORGE_DIR
+DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 
 
 def genome_to_decklist(individual):
@@ -69,6 +70,29 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
             '-n', nr_matches, '-f', 'sealed']
 
 
+def evaluate_deck_by_damage(individual):
+    decklist = genome_to_decklist(individual)
+    filename = 'candidate.dck'
+    fitness = 0
+    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
+    for opponent in opponents:
+        with open(CARD_DIRECTORY + filename, 'w') as file:
+            file.write(DECKLIST_HEADER)
+            for card in decklist:
+                file.write(card + '\n')
+
+        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
+        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
+        for line in p.stdout:
+            line = line.decode("utf-8").strip()
+            if 'damage to Ai(2' in line:
+                hit_event = line.split(' ')
+                print(hit_event)
+        p.wait()
+        fitness += 1
+    return fitness,  # MUST BE TUPLE!
+
+
 def evaluate_deck(individual):
     decklist = genome_to_decklist(individual)
     filename = 'candidate.dck'
@@ -77,7 +101,7 @@ def evaluate_deck(individual):
     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
     for opponent in opponents:
         with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write('[metadata]\nName=candidate\n[Main]\n')
+            file.write(DECKLIST_HEADER)
             for card in decklist:
                 file.write(card + '\n')
 
