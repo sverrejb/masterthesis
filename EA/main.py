@@ -16,8 +16,8 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 20
-MATCHES_PER_OPPONENT = '10'
+NUMBER_OF_GENERATIONS = 10
+MATCHES_PER_OPPONENT = '5'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -85,11 +85,14 @@ def evaluate_deck_by_damage(individual):
         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
-            if 'damage to Ai(2' in line:
+            if 'combat damage to Ai(2' in line:
                 hit_event = line.split(' ')
                 print(hit_event)
+                damage_index = hit_event.index('deals') + 1
+                damage = int(hit_event[damage_index])
+                fitness += damage
+
         p.wait()
-        fitness += 1
     return fitness,  # MUST BE TUPLE!
 
 
@@ -142,7 +145,7 @@ toolbox = base.Toolbox()
 toolbox.register("individual_deck", init_individual, creator.Individual)
 toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
 
-toolbox.register("evaluate", evaluate_deck)
+toolbox.register("evaluate", evaluate_deck_by_damage)
 toolbox.register("mate", mate_individuals)
 toolbox.register("mutate", mutate_deck)
 toolbox.register("select", tools.selTournament, tournsize=3)
