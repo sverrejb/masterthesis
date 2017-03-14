@@ -20,7 +20,7 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 POPSIZE = 10
 DECKSIZE = 40
 NUMBER_OF_GENERATIONS = 1
-MATCHES_PER_OPPONENT = '1'
+MATCHES_PER_OPPONENT = '10'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -76,7 +76,8 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
 def evaluate_deck_by_damage(individual):
     decklist = genome_to_decklist(individual)
     filename = 'candidate.dck'
-    fitness = 0
+    total_damage = 0
+    wins = 0
     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
     for opponent in opponents:
         with open(CARD_DIRECTORY + filename, 'w') as file:
@@ -90,12 +91,16 @@ def evaluate_deck_by_damage(individual):
             line = line.decode("utf-8").strip()
             if 'combat damage to Ai(2' in line:
                 hit_event = line.split(' ')
+                #print(hit_event) #For debugging
                 damage_index = hit_event.index('deals') + 1
                 damage = int(hit_event[damage_index])
-                fitness += damage
+                total_damage += damage
+            if 'Match result' in line:
+                result = line.split(' ')
+                wins += int(result[3])
 
         p.wait()
-    print('fitness:', fitness)
+        fitness = wins * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
     return fitness,  # MUST BE TUPLE!
 
 
