@@ -114,6 +114,7 @@ def evaluate_deck_by_wins(individual):
         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
+            print(line)
             if 'Match result' in line:
                 result = line.split(' ')
         p.wait()
@@ -148,7 +149,7 @@ def main():
     toolbox = base.Toolbox()
     toolbox.register("individual_deck", init_individual, creator.Individual)
     toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
-    toolbox.register("evaluate", evaluate_deck_by_damage)
+    toolbox.register("evaluate", evaluate_deck_by_wins)
     toolbox.register("mate", mate_individuals)
     toolbox.register("mutate", mutate_deck)
     toolbox.register("select", tools.selTournament, tournsize=3)
@@ -185,7 +186,7 @@ def main():
         for fitness in fitness_list:
             file.write(str(fitness)+', ')
         file.write('\n')
-        file.write('Time to complete: ' + str(time_to_complete))
+        file.write('Time to complete: ' + str(time_to_complete) + '\n')
 
 
 if __name__ == '__main__':
