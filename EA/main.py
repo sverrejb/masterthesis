@@ -1,6 +1,7 @@
 import copy
 import subprocess
 import time
+import os
 from random import randint
 
 from deap import algorithms
@@ -12,6 +13,7 @@ from deap import tools
 
 import config
 from cards import read_card_pool
+from read_json import read_cards_json
 
 import matplotlib.pyplot as plt
 
@@ -21,13 +23,50 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 1
+NUMBER_OF_GENERATIONS = 10
 MATCHES_PER_OPPONENT = '10'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
 FORGE_PATH = config.FORGE_DIR
 DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
+EXPERIMENT_FOLDER = str(datetime.datetime.now()).replace(":","-")
+gen = 0
+card_location = ""
+CARDS = read_cards_json
+
+
+def color_symbols(cardName):
+    colors=[CARDS[cardName['manaColor'].count('W')],
+            CARDS[cardName['manaColor'].count('U')],
+            CARDS[cardName['manaColor'].count('B')],
+            CARDS[cardName['manaColor'].count('R')],
+            CARDS[cardName['manaColor'].count('G')]] #WUBRG
+    return colors
+
+
+def land_symbols(cardName):
+    colors=[CARDS[cardName['colorIdentity'].count('W')],
+            CARDS[cardName['colorIdentity'].count('U')],
+            CARDS[cardName['colorIdentity'].count('B')],
+            CARDS[cardName['colorIdentity'].count('R')],
+            CARDS[cardName['colorIdentity'].count('G')]] #WUBRG
+    return colors
+
+
+def colorsymbols_in_deck(decklist):
+    colors = [0, 0, 0, 0, 0]
+    lands = [0, 0, 0, 0, 0]
+    for card in decklist:
+        if is_land(card):
+            lands = list(map(sum, lands, land_symbols(card)))
+        else:
+            colors = list(map(sum, colors, color_symbols(card)))
+    return lands, colors
+
+
+def is_land(cardName):
+    return 'manaColor' in CARDS[cardName]
 
 
 def genome_to_decklist(individual):
@@ -74,19 +113,22 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
             '-d', candidate_name, opponent_name,
             '-n', nr_matches, '-f', 'sealed']
 
+def write_decklist(filename, decklist):
+    with open(CARD_DIRECTORY + "\\" +filename, 'w') as file:
+        file.write(DECKLIST_HEADER)
+        for card in decklist:
+            file.write(card + '\n')
 
 def evaluate_deck_by_damage(individual):
     decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
+    filename = card_location + "\\" + str(time.time()).replace(".","")+'.dck'
+    write_decklist(filename, decklist)
+    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
     total_damage = 0
     wins = 0
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    for opponent in opponents:
-        with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write(DECKLIST_HEADER)
-            for card in decklist:
-                file.write(card + '\n')
 
+
+    for opponent in opponents:
         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
@@ -102,33 +144,8 @@ def evaluate_deck_by_damage(individual):
                 wins += int(result[3])
 
         p.wait()
-        fitness = wins * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
+        fitness = (wins+1) * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
     return fitness,  # MUST BE TUPLE!
-
-
-# def evaluate_deck(individual):
-#     decklist = genome_to_decklist(individual)
-#     filename = 'candidate.dck'
-#     # opponent = 'Merfolk.dck'
-#     fitness = 0
-#     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-#     for opponent in opponents:
-#         with open(CARD_DIRECTORY + filename, 'w') as file:
-#             file.write(DECKLIST_HEADER)
-#             for card in decklist:
-#                 file.write(card + '\n')
-#
-#         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-#
-#         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-#         for line in p.stdout:
-#             line = line.decode("utf-8").strip()
-#             if 'Match result' in line:
-#                 result = line.split(' ')
-#         p.wait()
-#         fitness += int(result[3])
-#     # print(fitness)
-#     return fitness,  # MUST BE TUPLE!
 
 
 def init_individual(icls, content):
@@ -160,17 +177,15 @@ toolbox.register("mate", mate_individuals)
 toolbox.register("mutate", mutate_deck)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
-# TODO: VELG BREEDING OG MUTASJONSSTRATEGI
-
-# TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
-
 population = toolbox.card_population()
 start_time = time.time()
 
 top1_list = []
-
+os.makedirs(CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER)
 for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.2)
+    card_location = EXPERIMENT_FOLDER + "\\" + str(gen)
+    os.makedirs(CARD_DIRECTORY + "\\" +card_location)
+    offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.7)
     fits = list(toolbox.map(toolbox.evaluate, offspring))
     print(list(fits))
     for fit, ind in zip(fits, offspring):
@@ -192,7 +207,7 @@ for generation in top1_list:
 print(fitness_list)
 print(type(fitness_list[0]))
 
-image_name = str(datetime.datetime.now()) + '.png'
+image_name = str(time.time()) + '.png'
 
 plt.plot([x[0] for x in fitness_list])
 plt.ylabel('some numbers')

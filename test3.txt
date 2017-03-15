@@ -1,0 +1,91 @@
+[(617520.0,), (417368.0,), (623604.0,), (877450.0,), (424711.0,), (396952.0,), (627576.0,), (521300.0,), (514786.0,), (646256.0,), (624680.0,), (516312.0,), (554375.0,), (495112.0,), (633145.0,), (435356.0,), (423540.0,), (368104.0,), (480816.0,), (455088.0,), (459910.0,), (695529.0,), (461772.0,), (621894.0,), (439560.0,), (520199.0,), (577280.0,), (507705.0,), (575294.0,), (642168.0,)]
+<class 'tuple'>
+
+
+
+
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(422378,), (224802,), (440818,), (280125,), (336069,), (399435,), (361522,), (422688,), (448350,), (617520,)]
+[(284988,), (231600,), (417368,), (340032,), (328696,), (260988,), (174375,), (322608,), (320976,), (282705,)]
+[(221214,), (268332,), (530100,), (623604,), (354768,), (324816,), (334943,), (217328,), (335688,), (387224,)]
+[(415695,), (299280,), (297924,), (305970,), (308108,), (877450,), (359560,), (551031,), (193890,), (185760,)]
+[(354848,), (243530,), (174200,), (322520,), (323136,), (418661,), (286890,), (424711,), (279372,), (322664,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(292230,), (293590,), (199230,), (226051,), (255906,), (292348,), (246582,), (391716,), (268576,), (396952,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(627576,), (382075,), (196458,), (276526,), (279164,), (443713,), (215940,), (191800,), (541168,), (116184,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(219167,), (263895,), (295108,), (495276,), (275082,), (492450,), (521300,), (249858,), (276760,), (310461,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(240426,), (168477,), (454545,), (362900,), (191110,), (514786,), (273078,), (317832,), (406068,), (383408,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(454981,), (255970,), (364000,), (481770,), (187146,), (285366,), (646256,), (340449,), (248400,), (418818,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(225990,), (364227,), (531696,), (245696,), (502266,), (624680,), (560950,), (285718,), (390750,), (364844,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(243747,), (328319,), (297792,), (361233,), (516312,), (383540,), (171255,), (413448,), (316771,), (251250,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(376419,), (554375,), (123000,), (94913,), (431200,), (508360,), (304080,), (382580,), (321594,), (275652,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(323325,), (495112,), (355218,), (369600,), (260013,), (307684,), (316332,), (195990,), (229500,), (373998,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(374574,), (386220,), (436072,), (633145,), (454736,), (316246,), (199872,), (217469,), (271440,), (396090,)]
+[(435356,), (302043,), (340008,), (277816,), (432915,), (293800,), (378004,), (214084,), (279396,), (353320,)]
+[(379332,), (354411,), (423540,), (270758,), (356025,), (448211,), (397764,), (271195,), (260278,), (196524,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(288802,), (291540,), (318280,), (191760,), (163506,), (368104,), (349800,), (357885,), (310780,), (115140,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(352240,), (133630,), (265696,), (407624,), (268212,), (447450,), (214462,), (345667,), (431520,), (480816,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(310792,), (340938,), (353678,), (338975,), (455088,), (256386,), (196116,), (398728,), (346955,), (266787,)]
+[(401187,), (344772,), (408196,), (348300,), (393048,), (283020,), (459910,), (264613,), (278400,), (412496,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(419314,), (304096,), (356420,), (298816,), (194540,), (349856,), (225441,), (695529,), (185367,), (411372,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(404294,), (461772,), (244296,), (332085,), (410220,), (328990,), (265646,), (398364,), (407530,), (428040,)]
+[(467562,), (400404,), (621894,), (221998,), (97027,), (221917,), (235950,), (464651,), (475566,), (442244,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(266112,), (208384,), (149400,), (297894,), (411432,), (212250,), (197096,), (281196,), (321630,), (439560,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(493172,), (337500,), (248157,), (341880,), (256470,), (335744,), (520199,), (265489,), (193158,), (400384,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(577280,), (346863,), (372068,), (531765,), (249356,), (423672,), (265994,), (308492,), (380722,), (457596,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(389872,), (399330,), (313992,), (500822,), (210240,), (311922,), (507705,), (445444,), (228820,), (495756,)]
+[(411675,), (255420,), (294100,), (416472,), (224576,), (547128,), (376747,), (297942,), (249864,), (575294,)]
+Warning: default (ie. inherited from base class) implementation of chkAIDrawback is used by Prey Upon for forge.ai.ability.FightAi. Consider declaring an overloaded method
+[(355152,), (452028,), (243219,), (224976,), (642168,), (441441,), (390181,), (234264,), (256086,), (291115,)]
+Traceback (most recent call last):
+0 (642168.0,)
+1 (452028.0,)
+  File "C:/Users/knutaf/Documents/masterthesis/EA/main.py", line 199, in <module>
+2 (452028.0,)
+3 (452028.0,)
+4 (452028.0,)
+5 (441441.0,)
+6 (441441.0,)
+7 (441441.0,)
+8 (441441.0,)
+9 (390181.0,)
+28503.74485206604
+[(617520.0,), (417368.0,), (623604.0,), (877450.0,), (424711.0,), (396952.0,), (627576.0,), (521300.0,), (514786.0,), (646256.0,), (624680.0,), (516312.0,), (554375.0,), (495112.0,), (633145.0,), (435356.0,), (423540.0,), (368104.0,), (480816.0,), (455088.0,), (459910.0,), (695529.0,), (461772.0,), (621894.0,), (439560.0,), (520199.0,), (577280.0,), (507705.0,), (575294.0,), (642168.0,)]
+<class 'tuple'>
