@@ -15,14 +15,13 @@ from cards import read_card_pool
 
 import matplotlib.pyplot as plt
 
+from scoop import futures
 
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 1
-MATCHES_PER_OPPONENT = '10'
+NUMBER_OF_GENERATIONS = 3
+MATCHES_PER_OPPONENT = '1'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -30,171 +29,180 @@ FORGE_PATH = config.FORGE_DIR
 DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 
 
-def genome_to_decklist(individual):
-    deck_list = []
-    for c in individual:
-        deck_list.append(CARD_POOL[c][0])
-    return deck_list
+def main():
+
+    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+    creator.create("Individual", list, fitness=creator.FitnessMax)
 
 
-def generate_individual(card_pool):
-    individual = []
-    card_pool_size = len(card_pool)
-    while len(individual) < 40:
-        genome = randint(0, card_pool_size - 1)
-        number_of_genome_present = individual.count(genome)
-        if number_of_genome_present < card_pool[genome][1]:
-            individual.append(genome)
-    return individual
+
+    def genome_to_decklist(individual):
+        deck_list = []
+        for c in individual:
+            deck_list.append(CARD_POOL[c][0])
+        return deck_list
 
 
-def generate_first_generation_decks(card_pool):
-    population = []
-    for i in range(POPSIZE):
-        population.append(generate_individual(card_pool))
-    return population
+    def generate_individual(card_pool):
+        individual = []
+        card_pool_size = len(card_pool)
+        while len(individual) < 40:
+            genome = randint(0, card_pool_size - 1)
+            number_of_genome_present = individual.count(genome)
+            if number_of_genome_present < card_pool[genome][1]:
+                individual.append(genome)
+        return individual
 
 
-def mutate_deck(individual):
-    size = len(individual)
-    mutation_site = randint(0, size - 1)
-    mutated = False
-    while not mutated:
-        new_gene = randint(0, CARD_POOL_SIZE - 1)
-        gene_limit = CARD_POOL[new_gene][1]
-        if individual.count(new_gene) < gene_limit:
-            individual[mutation_site] = new_gene
-            mutated = True
-    return individual,  # MUST RETURN TUPLE
+    def generate_first_generation_decks(card_pool):
+        population = []
+        for i in range(POPSIZE):
+            population.append(generate_individual(card_pool))
+        return population
 
 
-def build_cmd(candidate_name, opponent_name, nr_matches):
-    return ['java', '-Xmx1024m', '-jar',
-            'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
-            '-d', candidate_name, opponent_name,
-            '-n', nr_matches, '-f', 'sealed']
+    def mutate_deck(individual):
+        size = len(individual)
+        mutation_site = randint(0, size - 1)
+        mutated = False
+        while not mutated:
+            new_gene = randint(0, CARD_POOL_SIZE - 1)
+            gene_limit = CARD_POOL[new_gene][1]
+            if individual.count(new_gene) < gene_limit:
+                individual[mutation_site] = new_gene
+                mutated = True
+        return individual,  # MUST RETURN TUPLE
 
 
-def evaluate_deck_by_damage(individual):
-    decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
-    total_damage = 0
-    wins = 0
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    for opponent in opponents:
-        with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write(DECKLIST_HEADER)
-            for card in decklist:
-                file.write(card + '\n')
-
-        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-        for line in p.stdout:
-            line = line.decode("utf-8").strip()
-            if 'combat damage to Ai(2' in line:
-                hit_event = line.split(' ')
-                #print(hit_event) #For debugging
-                damage_index = hit_event.index('deals') + 1
-                damage = int(hit_event[damage_index])
-                total_damage += damage
-            if 'Match result' in line:
-                result = line.split(' ')
-                wins += int(result[3])
-
-        p.wait()
-        fitness = wins * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
-    return fitness,  # MUST BE TUPLE!
+    def build_cmd(candidate_name, opponent_name, nr_matches):
+        return ['java', '-Xmx1024m', '-jar',
+                'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
+                '-d', candidate_name, opponent_name,
+                '-n', nr_matches, '-f', 'sealed']
 
 
-# def evaluate_deck(individual):
-#     decklist = genome_to_decklist(individual)
-#     filename = 'candidate.dck'
-#     # opponent = 'Merfolk.dck'
-#     fitness = 0
-#     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-#     for opponent in opponents:
-#         with open(CARD_DIRECTORY + filename, 'w') as file:
-#             file.write(DECKLIST_HEADER)
-#             for card in decklist:
-#                 file.write(card + '\n')
-#
-#         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-#
-#         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-#         for line in p.stdout:
-#             line = line.decode("utf-8").strip()
-#             if 'Match result' in line:
-#                 result = line.split(' ')
-#         p.wait()
-#         fitness += int(result[3])
-#     # print(fitness)
-#     return fitness,  # MUST BE TUPLE!
+    def evaluate_deck_by_damage(individual):
+        decklist = genome_to_decklist(individual)
+        filename = 'candidate.dck'
+        total_damage = 0
+        wins = 0
+        opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
+        for opponent in opponents:
+            with open(CARD_DIRECTORY + filename, 'w') as file:
+                file.write(DECKLIST_HEADER)
+                for card in decklist:
+                    file.write(card + '\n')
+
+            cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
+            p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
+            for line in p.stdout:
+                line = line.decode("utf-8").strip()
+                if 'combat damage to Ai(2' in line:
+                    hit_event = line.split(' ')
+                    #print(hit_event) #For debugging
+                    damage_index = hit_event.index('deals') + 1
+                    damage = int(hit_event[damage_index])
+                    total_damage += damage
+                if 'Match result' in line:
+                    result = line.split(' ')
+                    wins += int(result[3])
+
+            p.wait()
+            fitness = wins * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
+        return fitness,  # MUST BE TUPLE!
 
 
-def init_individual(icls, content):
-    return icls(content)
+    # def evaluate_deck(individual):
+    #     decklist = genome_to_decklist(individual)
+    #     filename = 'candidate.dck'
+    #     # opponent = 'Merfolk.dck'
+    #     fitness = 0
+    #     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
+    #     for opponent in opponents:
+    #         with open(CARD_DIRECTORY + filename, 'w') as file:
+    #             file.write(DECKLIST_HEADER)
+    #             for card in decklist:
+    #                 file.write(card + '\n')
+    #
+    #         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
+    #
+    #         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
+    #         for line in p.stdout:
+    #             line = line.decode("utf-8").strip()
+    #             if 'Match result' in line:
+    #                 result = line.split(' ')
+    #         p.wait()
+    #         fitness += int(result[3])
+    #     # print(fitness)
+    #     return fitness,  # MUST BE TUPLE!
 
 
-def init_population(pcls, ind_init, list_of_decks):
-    return pcls(ind_init(c) for c in list_of_decks)
+    def init_individual(icls, content):
+        return icls(content)
 
 
-def mate_individuals(ind1, ind2):
-    templist = sorted(copy.deepcopy(ind1) + copy.deepcopy(ind2))
-    list_ind1 = templist[0::2]
-    list_ind2 = templist[1::2]
-    for i in range(len(list_ind1)):
-        ind1[i], ind2[i] = list_ind1[i], list_ind2[i]
-    return ind1, ind2
+    def init_population(pcls, ind_init, list_of_decks):
+        return pcls(ind_init(c) for c in list_of_decks)
 
 
-first_gen_decks = generate_first_generation_decks(CARD_POOL)
+    def mate_individuals(ind1, ind2):
+        templist = sorted(copy.deepcopy(ind1) + copy.deepcopy(ind2))
+        list_ind1 = templist[0::2]
+        list_ind2 = templist[1::2]
+        for i in range(len(list_ind1)):
+            ind1[i], ind2[i] = list_ind1[i], list_ind2[i]
+        return ind1, ind2
 
-toolbox = base.Toolbox()
 
-toolbox.register("individual_deck", init_individual, creator.Individual)
-toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
+    first_gen_decks = generate_first_generation_decks(CARD_POOL)
 
-toolbox.register("evaluate", evaluate_deck_by_damage)
-toolbox.register("mate", mate_individuals)
-toolbox.register("mutate", mutate_deck)
-toolbox.register("select", tools.selTournament, tournsize=3)
+    toolbox = base.Toolbox()
 
-# TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+    toolbox.register("individual_deck", init_individual, creator.Individual)
+    toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
 
-# TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
+    toolbox.register("evaluate", evaluate_deck_by_damage)
+    toolbox.register("mate", mate_individuals)
+    toolbox.register("mutate", mutate_deck)
+    toolbox.register("select", tools.selTournament, tournsize=3)
 
-population = toolbox.card_population()
-start_time = time.time()
+    # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
-top1_list = []
+    # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
 
-for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.2)
-    fits = list(toolbox.map(toolbox.evaluate, offspring))
-    print(list(fits))
-    for fit, ind in zip(fits, offspring):
-        ind.fitness.values = fit
-    population = toolbox.select(offspring, k=len(population))
-    top1 = tools.selBest(population, k=1)
-    top1_list.append(top1)
+    population = toolbox.card_population()
+    start_time = time.time()
 
-top10 = tools.selBest(population, k=10)
-for i in range(len(top10)):
-    print(i, top10[i].fitness.values)
+    top1_list = []
 
-print(time.time() - start_time)
+    for gen in range(NUMBER_OF_GENERATIONS):
+        offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.2)
+        fits = list(futures.map(toolbox.evaluate, offspring))
+        print(list(fits))
+        for fit, ind in zip(fits, offspring):
+            ind.fitness.values = fit
+        population = toolbox.select(offspring, k=len(population))
+        top1 = tools.selBest(population, k=1)
+        top1_list.append(top1)
 
-fitness_list = []
-for generation in top1_list:
-    for ind in generation:
-        fitness_list.append(ind.fitness.values)
-print(fitness_list)
-print(type(fitness_list[0]))
+    top10 = tools.selBest(population, k=10)
+    for i in range(len(top10)):
+        print(i, top10[i].fitness.values)
 
-image_name = str(datetime.datetime.now()) + '.png'
+    print(time.time() - start_time)
 
-plt.plot([x[0] for x in fitness_list])
-plt.ylabel('some numbers')
-plt.savefig(image_name)
+    fitness_list = []
+    for generation in top1_list:
+        for ind in generation:
+            fitness_list.append(ind.fitness.values)
+    print(fitness_list)
+    print(type(fitness_list[0]))
 
+    image_name = str(datetime.datetime.now()) + '.png'
+
+    plt.plot([x[0] for x in fitness_list])
+    plt.ylabel('some numbers')
+    plt.savefig(image_name)
+
+if __name__ == '__main__':
+    main()
