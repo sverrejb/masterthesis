@@ -20,8 +20,8 @@ from scoop import futures
 
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 3
-MATCHES_PER_OPPONENT = '1'
+NUMBER_OF_GENERATIONS = 10
+MATCHES_PER_OPPONENT = '5'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -200,9 +200,9 @@ def main():
 
     image_name = str(datetime.datetime.now()) + '.png'
 
-    plt.plot([x[0] for x in fitness_list])
-    plt.ylabel('some numbers')
-    plt.savefig(image_name)
+    # plt.plot([x[0] for x in fitness_list])
+    # plt.ylabel('some numbers')
+    # plt.savefig(image_name)
 
 if __name__ == '__main__':
     main()
