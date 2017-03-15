@@ -114,7 +114,6 @@ def evaluate_deck_by_wins(individual):
         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
-            print(line)
             if 'Match result' in line:
                 result = line.split(' ')
         p.wait()
