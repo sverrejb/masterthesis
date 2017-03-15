@@ -33,24 +33,24 @@ DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 EXPERIMENT_FOLDER = str(datetime.datetime.now()).replace(":","-")
 gen = 0
 card_location = ""
-CARDS = read_cards_json
+CARDS = read_cards_json()
 
 
 def color_symbols(cardName):
-    colors=[CARDS[cardName['manaColor'].count('W')],
-            CARDS[cardName['manaColor'].count('U')],
-            CARDS[cardName['manaColor'].count('B')],
-            CARDS[cardName['manaColor'].count('R')],
-            CARDS[cardName['manaColor'].count('G')]] #WUBRG
+    colors=[CARDS[cardName]['manaCost'].count('W'),
+            CARDS[cardName]['manaCost'].count('U'),
+            CARDS[cardName]['manaCost'].count('B'),
+            CARDS[cardName]['manaCost'].count('R'),
+            CARDS[cardName]['manaCost'].count('G')] #WUBRG
     return colors
 
 
 def land_symbols(cardName):
-    colors=[CARDS[cardName['colorIdentity'].count('W')],
-            CARDS[cardName['colorIdentity'].count('U')],
-            CARDS[cardName['colorIdentity'].count('B')],
-            CARDS[cardName['colorIdentity'].count('R')],
-            CARDS[cardName['colorIdentity'].count('G')]] #WUBRG
+    colors=[CARDS[cardName]['colorIdentity'].count('W'),
+            CARDS[cardName]['colorIdentity'].count('U'),
+            CARDS[cardName]['colorIdentity'].count('B'),
+            CARDS[cardName]['colorIdentity'].count('R'),
+            CARDS[cardName]['colorIdentity'].count('G')] #WUBRG
     return colors
 
 
@@ -58,15 +58,19 @@ def colorsymbols_in_deck(decklist):
     colors = [0, 0, 0, 0, 0]
     lands = [0, 0, 0, 0, 0]
     for card in decklist:
-        if is_land(card):
-            lands = list(map(sum, lands, land_symbols(card)))
+        card = card.lower()
+        if is_land(str(card).lower()):
+            lands = list(map(sum, zip(lands, land_symbols(card))))
         else:
-            colors = list(map(sum, colors, color_symbols(card)))
+            colors = list(map(sum, zip(colors, color_symbols(card))))
     return lands, colors
 
 
 def is_land(cardName):
-    return 'manaColor' in CARDS[cardName]
+    if 'manaCost' in CARDS[cardName].keys():
+        return False
+    else:
+        return True
 
 
 def genome_to_decklist(individual):
@@ -126,7 +130,7 @@ def evaluate_deck_by_damage(individual):
     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
     total_damage = 0
     wins = 0
-
+    colors,lands=colorsymbols_in_deck(decklist)
 
     for opponent in opponents:
         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
