@@ -6,21 +6,16 @@ from random import randint
 from deap import algorithms
 from deap import base
 from deap import creator
-
-import datetime
 from deap import tools
+from scoop import futures
 
 import config
 from cards import read_card_pool
 
-
-from scoop import futures
-
-
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 10
-MATCHES_PER_OPPONENT = '5'
+NUMBER_OF_GENERATIONS = 2
+MATCHES_PER_OPPONENT = '1'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -29,6 +24,8 @@ DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
+
+
 def genome_to_decklist(individual):
     deck_list = []
     for c in individual:
@@ -91,7 +88,7 @@ def evaluate_deck_by_damage(individual):
             line = line.decode("utf-8").strip()
             if 'combat damage to Ai(2' in line:
                 hit_event = line.split(' ')
-                #print(hit_event) #For debugging
+                # print(hit_event) #For debugging
                 damage_index = hit_event.index('deals') + 1
                 damage = int(hit_event[damage_index])
                 total_damage += damage
@@ -99,33 +96,29 @@ def evaluate_deck_by_damage(individual):
                 result = line.split(' ')
                 wins += int(result[3])
         p.wait()
-        fitness = wins * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
+        fitness = wins * total_damage  # (wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
     return fitness,  # MUST BE TUPLE!
 
 
-    # def evaluate_deck(individual):
-    #     decklist = genome_to_decklist(individual)
-    #     filename = 'candidate.dck'
-    #     # opponent = 'Merfolk.dck'
-    #     fitness = 0
-    #     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    #     for opponent in opponents:
-    #         with open(CARD_DIRECTORY + filename, 'w') as file:
-    #             file.write(DECKLIST_HEADER)
-    #             for card in decklist:
-    #                 file.write(card + '\n')
-    #
-    #         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-    #
-    #         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-    #         for line in p.stdout:
-    #             line = line.decode("utf-8").strip()
-    #             if 'Match result' in line:
-    #                 result = line.split(' ')
-    #         p.wait()
-    #         fitness += int(result[3])
-    #     # print(fitness)
-    #     return fitness,  # MUST BE TUPLE!
+def evaluate_deck_by_wins(individual):
+    decklist = genome_to_decklist(individual)
+    filename = 'candidate.dck'
+    fitness = 0
+    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
+    for opponent in opponents:
+        with open(CARD_DIRECTORY + filename, 'w') as file:
+            file.write(DECKLIST_HEADER)
+            for card in decklist:
+                file.write(card + '\n')
+        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
+        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
+        for line in p.stdout:
+            line = line.decode("utf-8").strip()
+            if 'Match result' in line:
+                result = line.split(' ')
+        p.wait()
+        fitness += int(result[3])
+    return fitness,  # MUST BE TUPLE!
 
 
 def init_individual(icls, content):
@@ -146,29 +139,21 @@ def mate_individuals(ind1, ind2):
 
 
 def main():
+    # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+    # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
 
-
-
-
+    start_time = time.time()
     first_gen_decks = generate_first_generation_decks(CARD_POOL)
 
     toolbox = base.Toolbox()
-
     toolbox.register("individual_deck", init_individual, creator.Individual)
     toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
-
     toolbox.register("evaluate", evaluate_deck_by_damage)
     toolbox.register("mate", mate_individuals)
     toolbox.register("mutate", mutate_deck)
     toolbox.register("select", tools.selTournament, tournsize=3)
 
-    # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
-
-    # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
-
     population = toolbox.card_population()
-    start_time = time.time()
-
     top1_list = []
 
     for gen in range(NUMBER_OF_GENERATIONS):
@@ -185,14 +170,22 @@ def main():
     for i in range(len(top10)):
         print(i, top10[i].fitness.values)
 
-    print(time.time() - start_time)
 
     fitness_list = []
     for generation in top1_list:
         for ind in generation:
             fitness_list.append(ind.fitness.values)
-    print(fitness_list)
-    print(type(fitness_list[0]))
+
+    fitness_list = [x[0] for x in fitness_list]
+
+    time_to_complete = (time.time() - start_time)
+
+    with open('result.txt', 'w') as file:
+        file.write('Topscore for each generation:\n')
+        for fitness in fitness_list:
+            file.write(str(fitness)+', ')
+        file.write('\n')
+        file.write('Time to complete: ' + str(time_to_complete))
 
 
 if __name__ == '__main__':
