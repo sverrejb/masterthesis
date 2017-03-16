@@ -14,6 +14,8 @@ from cards import read_card_pool
 
 POPSIZE = 10
 DECKSIZE = 40
+CROSSOVER_RATE = 0.1
+MUTATION_RATE = 0.2
 NUMBER_OF_GENERATIONS = 50
 MATCHES_PER_OPPONENT = '50'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
@@ -138,6 +140,15 @@ def mate_individuals(ind1, ind2):
     return ind1, ind2
 
 
+def write_log(fitness_list, time_to_complete):
+    with open('result.txt', 'w') as file:
+        file.write('Topscore for each generation:\n')
+        for fitness in fitness_list:
+            file.write(str(fitness)+', ')
+        file.write('\n')
+        file.write('Time to complete: ' + str(time_to_complete) + '\n')
+
+
 def main():
     # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
     # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
@@ -180,12 +191,7 @@ def main():
 
     time_to_complete = (time.time() - start_time)
 
-    with open('result.txt', 'w') as file:
-        file.write('Topscore for each generation:\n')
-        for fitness in fitness_list:
-            file.write(str(fitness)+', ')
-        file.write('\n')
-        file.write('Time to complete: ' + str(time_to_complete) + '\n')
+    write_log(fitness_list, time_to_complete)
 
 
 if __name__ == '__main__':
