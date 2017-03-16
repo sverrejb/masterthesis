@@ -11,13 +11,14 @@ from scoop import futures
 
 import config
 from cards import read_card_pool
-from logging import write_log
+from experimentlogging import write_log, write_graph
+
 
 POPSIZE = 10
 DECKSIZE = 40
 CROSSOVER_RATE = 0.1
 MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 1
+NUMBER_OF_GENERATIONS = 2
 MATCHES_PER_OPPONENT = '1'  # must be string!
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
@@ -181,7 +182,12 @@ def main():
     fitness_list = [x[0] for x in fitness_list]
     time_to_complete = (time.time() - start_time)
 
-    write_log(fitness_list, time_to_complete)
+
+    # TODO: FIX THIS UGLY SHIT
+    write_log(fitness_list, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS, NUMBER_OF_GENERATIONS, POPSIZE,
+              MUTATION_RATE, CROSSOVER_RATE)
+
+    write_graph(fitness_list)
 
 
 if __name__ == '__main__':
