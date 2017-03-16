@@ -28,7 +28,8 @@ def write_log(fitness_list, time_to_complete, matches_per_opponent, opponents, n
 
 
 def write_graph(top_list, median_list, worst_list):
-    filename = "results.png"
+    timestamp = datetime.datetime.now().strftime("%d%m%H%M")
+    filename = "{}.png".format(timestamp)
     plt.plot(top_list)
     plt.plot(median_list, 'ro')
     plt.plot(worst_list, 'g^')
