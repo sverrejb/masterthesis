@@ -16,13 +16,14 @@ POPSIZE = 10
 DECKSIZE = 40
 CROSSOVER_RATE = 0.1
 MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 50
-MATCHES_PER_OPPONENT = '50'
+NUMBER_OF_GENERATIONS = 1
+MATCHES_PER_OPPONENT = '1'  # must be string!
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
 FORGE_PATH = config.FORGE_DIR
 DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
+OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -78,8 +79,7 @@ def evaluate_deck_by_damage(individual):
     filename = 'candidate.dck'
     total_damage = 0
     wins = 0
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    for opponent in opponents:
+    for opponent in OPPONENTS:
         with open(CARD_DIRECTORY + filename, 'w') as file:
             file.write(DECKLIST_HEADER)
             for card in decklist:
@@ -106,8 +106,7 @@ def evaluate_deck_by_wins(individual):
     decklist = genome_to_decklist(individual)
     filename = 'candidate.dck'
     fitness = 0
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    for opponent in opponents:
+    for opponent in OPPONENTS:
         with open(CARD_DIRECTORY + filename, 'w') as file:
             file.write(DECKLIST_HEADER)
             for card in decklist:
@@ -142,11 +141,22 @@ def mate_individuals(ind1, ind2):
 
 def write_log(fitness_list, time_to_complete):
     with open('result.txt', 'w') as file:
+        number_of_matches = int(MATCHES_PER_OPPONENT) * len(OPPONENTS) * NUMBER_OF_GENERATIONS * POPSIZE
+
+        file.write("Experiment log:\n")
+        file.write("Mutation rate: {}\n".format(MUTATION_RATE))
+        file.write("Crossover rate: {}\n".format(CROSSOVER_RATE))
+        file.write("Number of generations: {}\n".format(NUMBER_OF_GENERATIONS))
+        file.write("Number of matches pr opponent: {}\n".format(MATCHES_PER_OPPONENT))
+        file.write("Number of opponents: {}\n".format(len(OPPONENTS)))
+        file.write("Total number of matches: {}\n".format(number_of_matches))
+        file.write('Time to complete: {}\n'.format(time_to_complete))
+        file.write('Avg time per match: {}\n'.format(time_to_complete/number_of_matches))
+        file.write('\n')
         file.write('Topscore for each generation:\n')
         for fitness in fitness_list:
-            file.write(str(fitness)+', ')
+            file.write(str(fitness) + ', ')
         file.write('\n')
-        file.write('Time to complete: ' + str(time_to_complete) + '\n')
 
 
 def main():
@@ -154,6 +164,7 @@ def main():
     # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
 
     start_time = time.time()
+
     first_gen_decks = generate_first_generation_decks(CARD_POOL)
 
     toolbox = base.Toolbox()
@@ -168,7 +179,7 @@ def main():
     top1_list = []
 
     for gen in range(NUMBER_OF_GENERATIONS):
-        offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.2)
+        offspring = algorithms.varAnd(population, toolbox, cxpb=CROSSOVER_RATE, mutpb=MUTATION_RATE)
         fits = list(futures.map(toolbox.evaluate, offspring))
         print(list(fits))
         for fit, ind in zip(fits, offspring):
@@ -181,14 +192,12 @@ def main():
     for i in range(len(top10)):
         print(i, top10[i].fitness.values)
 
-
     fitness_list = []
     for generation in top1_list:
         for ind in generation:
             fitness_list.append(ind.fitness.values)
 
     fitness_list = [x[0] for x in fitness_list]
-
     time_to_complete = (time.time() - start_time)
 
     write_log(fitness_list, time_to_complete)
