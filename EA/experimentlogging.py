@@ -27,8 +27,10 @@ def write_log(fitness_list, time_to_complete, matches_per_opponent, opponents, n
         file.write('\n')
 
 
-def write_graph(fitness_list):
+def write_graph(fitness_list, median_list, worst_list):
+    filename = "results.png"
     plt.plot(fitness_list)
-    plt.savefig('test.png')
-
-
+    plt.plot(median_list, 'ro')
+    plt.plot(worst_list, 'g^')
+    plt.legend(['Strongest', 'Median', 'Worst'], loc='upper left')
+    plt.savefig(filename)

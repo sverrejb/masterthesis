@@ -8,6 +8,7 @@ from deap import base
 from deap import creator
 from deap import tools
 from scoop import futures
+from statistics import median
 
 import config
 from cards import read_card_pool
@@ -18,7 +19,7 @@ POPSIZE = 10
 DECKSIZE = 40
 CROSSOVER_RATE = 0.1
 MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 1
+NUMBER_OF_GENERATIONS = 3
 MATCHES_PER_OPPONENT = '1'  # must be string!
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
@@ -158,36 +159,34 @@ def main():
     toolbox.register("select", tools.selTournament, tournsize=3)
 
     population = toolbox.card_population()
-    top1_list = []
+    top_list = []
+    median_list = []
+    worst_list = []
 
     for gen in range(NUMBER_OF_GENERATIONS):
         offspring = algorithms.varAnd(population, toolbox, cxpb=CROSSOVER_RATE, mutpb=MUTATION_RATE)
         fits = list(futures.map(toolbox.evaluate, offspring))
-        print(list(fits))
+        print(fits)
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
-        top1 = tools.selBest(population, k=1)
-        top1_list.append(top1)
+
+        fitness_list = [x[0] for x in fits]
+        top_list.append(max(fitness_list))
+        median_list.append(median(fitness_list))
+        worst_list.append(min(fitness_list))
 
     top10 = tools.selBest(population, k=10)
     for i in range(len(top10)):
         print(i, top10[i].fitness.values)
 
-    fitness_list = []
-    for generation in top1_list:
-        for ind in generation:
-            fitness_list.append(ind.fitness.values)
-
-    fitness_list = [x[0] for x in fitness_list]
     time_to_complete = (time.time() - start_time)
 
-
     # TODO: FIX THIS UGLY SHIT
-    write_log(fitness_list, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS, NUMBER_OF_GENERATIONS, POPSIZE,
+    write_log(top_list, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS, NUMBER_OF_GENERATIONS, POPSIZE,
               MUTATION_RATE, CROSSOVER_RATE)
 
-    write_graph(fitness_list)
+    write_graph(top_list, median_list, worst_list)
 
 
 if __name__ == '__main__':
