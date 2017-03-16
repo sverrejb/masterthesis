@@ -23,8 +23,8 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 
 POPSIZE = 10
 DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 10
-MATCHES_PER_OPPONENT = '10'
+NUMBER_OF_GENERATIONS = 3
+MATCHES_PER_OPPONENT = '2'
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -118,16 +118,17 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
             '-n', nr_matches, '-f', 'sealed']
 
 def write_decklist(filename, decklist):
-    with open(CARD_DIRECTORY + "\\" +filename, 'w') as file:
+    with open(filename, 'w') as file:
         file.write(DECKLIST_HEADER)
         for card in decklist:
             file.write(card + '\n')
 
 def evaluate_deck_by_damage(individual):
     decklist = genome_to_decklist(individual)
-    filename = card_location + "\\" + str(time.time()).replace(".","")+'.dck'
+    filename = "candidate.dck"#card_location + "\\" + str(time.time()).replace(".","")+'.dck'
     write_decklist(filename, decklist)
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
+    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck",
+                 "BGw-sealed-opponent.dck", "UW-sealed-opponent.dck"]
     total_damage = 0
     wins = 0
     colors,lands=colorsymbols_in_deck(decklist)
@@ -187,14 +188,20 @@ start_time = time.time()
 top1_list = []
 os.makedirs(CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER)
 for gen in range(NUMBER_OF_GENERATIONS):
-    card_location = EXPERIMENT_FOLDER + "\\" + str(gen)
-    os.makedirs(CARD_DIRECTORY + "\\" +card_location)
+    card_location = CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER + "\\" + str(gen)
+    os.makedirs(card_location)
     offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.7)
     fits = list(toolbox.map(toolbox.evaluate, offspring))
     print(list(fits))
     for fit, ind in zip(fits, offspring):
         ind.fitness.values = fit
     population = toolbox.select(offspring, k=len(population))
+    print(len(population))
+    print(len(population))
+    counter = 0
+    for solution in population:
+        write_decklist(card_location + "\\" + str(counter)+'.dck', genome_to_decklist(solution))
+        counter += 1
     top1 = tools.selBest(population, k=1)
     top1_list.append(top1)
 
