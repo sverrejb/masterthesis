@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def write_log(fitness_list, time_to_complete, matches_per_opponent, opponents, number_of_generations, popsize,
               mutation_rate, crossover_rate):
     filename = str(datetime.datetime.now()) + '.txt'
-    with open(filename, 'w') as file:
+    with open('results/' + filename, 'w') as file:
         number_of_matches = int(matches_per_opponent) * len(opponents) * number_of_generations * popsize
 
         file.write('Experiment log:\n')
