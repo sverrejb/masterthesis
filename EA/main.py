@@ -12,7 +12,7 @@ import datetime
 from deap import tools
 
 import config
-from cards import read_card_pool
+from cards import read_card_pool,  colorsymbols_in_deck
 from read_json import read_cards_json
 
 import matplotlib.pyplot as plt
@@ -33,44 +33,8 @@ DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 EXPERIMENT_FOLDER = str(datetime.datetime.now()).replace(":","-")
 gen = 0
 card_location = ""
+global CARDS
 CARDS = read_cards_json()
-
-
-def color_symbols(cardName):
-    colors=[CARDS[cardName]['manaCost'].count('W'),
-            CARDS[cardName]['manaCost'].count('U'),
-            CARDS[cardName]['manaCost'].count('B'),
-            CARDS[cardName]['manaCost'].count('R'),
-            CARDS[cardName]['manaCost'].count('G')] #WUBRG
-    return colors
-
-
-def land_symbols(cardName):
-    colors=[CARDS[cardName]['colorIdentity'].count('W'),
-            CARDS[cardName]['colorIdentity'].count('U'),
-            CARDS[cardName]['colorIdentity'].count('B'),
-            CARDS[cardName]['colorIdentity'].count('R'),
-            CARDS[cardName]['colorIdentity'].count('G')] #WUBRG
-    return colors
-
-
-def colorsymbols_in_deck(decklist):
-    colors = [0, 0, 0, 0, 0]
-    lands = [0, 0, 0, 0, 0]
-    for card in decklist:
-        card = card.lower()
-        if is_land(str(card).lower()):
-            lands = list(map(sum, zip(lands, land_symbols(card))))
-        else:
-            colors = list(map(sum, zip(colors, color_symbols(card))))
-    return lands, colors
-
-
-def is_land(cardName):
-    if 'manaCost' in CARDS[cardName].keys():
-        return False
-    else:
-        return True
 
 
 def genome_to_decklist(individual):
@@ -117,21 +81,23 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
             '-d', candidate_name, opponent_name,
             '-n', nr_matches, '-f', 'sealed']
 
+
 def write_decklist(filename, decklist):
     with open(filename, 'w') as file:
         file.write(DECKLIST_HEADER)
         for card in decklist:
             file.write(card + '\n')
 
+
 def evaluate_deck_by_damage(individual):
     decklist = genome_to_decklist(individual)
-    filename = "candidate.dck"#card_location + "\\" + str(time.time()).replace(".","")+'.dck'
+    filename = "candidate.dck"                  #card_location + "\\" + str(time.time()).replace(".","")+'.dck'
     write_decklist(filename, decklist)
     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck",
                  "BGw-sealed-opponent.dck", "UW-sealed-opponent.dck"]
     total_damage = 0
     wins = 0
-    colors,lands=colorsymbols_in_deck(decklist)
+    # colors,lands = colorsymbols_in_deck(CARDS, decklist)
 
     for opponent in opponents:
         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
@@ -196,8 +162,6 @@ for gen in range(NUMBER_OF_GENERATIONS):
     for fit, ind in zip(fits, offspring):
         ind.fitness.values = fit
     population = toolbox.select(offspring, k=len(population))
-    print(len(population))
-    print(len(population))
     counter = 0
     for solution in population:
         write_decklist(card_location + "\\" + str(counter)+'.dck', genome_to_decklist(solution))
