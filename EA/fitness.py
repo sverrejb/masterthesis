@@ -31,7 +31,7 @@ def evaluate_deck_by_wins(individual):
                 total_damage += damage
             if 'Match result' in line:
                 result = line.split(' ')
-                wins += int(result[3])
+        wins += int(result[3])
         p.wait()
         fitness = wins  # (wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
     return fitness,  # MUST BE TUPLE!
