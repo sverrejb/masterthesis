@@ -69,10 +69,8 @@ def mate_individuals(ind1, ind2):
 
 def main():
     # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
-    # TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
 
     start_time = time.time()
-
     first_gen_decks = generate_first_generation_decks(ct.CARD_POOL)
 
     toolbox = base.Toolbox()
@@ -125,7 +123,6 @@ def main():
         print(i, top10[i].fitness.values)
 
     alpha_deck = genome_to_decklist(alpha_deck[0])
-
 
     write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck)
     write_graph(top_list, median_list, worst_list)

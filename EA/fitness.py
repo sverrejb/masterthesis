@@ -1,4 +1,5 @@
 import subprocess
+
 import constants as ct
 from decks import genome_to_decklist, write_decklist
 
@@ -23,12 +24,12 @@ def evaluate_deck_by_wins(individual):
         p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
-            if 'combat damage to Ai(2' in line:
-                hit_event = line.split(' ')
-                # print(hit_event) #For debugging
-                damage_index = hit_event.index('deals') + 1
-                damage = int(hit_event[damage_index])
-                total_damage += damage
+            # if 'combat damage to Ai(2' in line:
+            #     hit_event = line.split(' ')
+            #     # print(hit_event) #For debugging
+            #     damage_index = hit_event.index('deals') + 1
+            #     damage = int(hit_event[damage_index])
+            #     total_damage += damage
             if 'Match result' in line:
                 result = line.split(' ')
         wins += int(result[3])
