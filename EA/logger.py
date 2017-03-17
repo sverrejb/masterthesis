@@ -3,11 +3,9 @@ import constants as ct
 
 import matplotlib
 matplotlib.use('Agg')
-
 import matplotlib.pyplot as plt
 
 
-# TODO: fix this ugly shit
 def write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
     filename = str(datetime.datetime.now()) + '.txt'
     with open('results/' + filename, 'w') as file:

@@ -1,6 +1,5 @@
 import copy
 import os
-import subprocess
 import time
 from random import randint
 from statistics import median
@@ -12,17 +11,15 @@ from deap import tools
 from scoop import futures
 
 import constants as ct
+from decks import genome_to_decklist, write_decklist
+from fitness import evaluate_deck_by_wins
 from logger import write_log, write_graph
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 
-def genome_to_decklist(individual):
-    deck_list = []
-    for c in individual:
-        deck_list.append(ct.CARD_POOL[c][0])
-    return deck_list
+
 
 
 def generate_individual(card_pool):
@@ -54,47 +51,6 @@ def mutate_deck(individual):
             individual[mutation_site] = new_gene
             mutated = True
     return individual,  # MUST RETURN TUPLE
-
-
-def build_cmd(candidate_name, opponent_name, nr_matches):
-    return ['java', '-Xmx1024m', '-jar',
-            'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
-            '-d', candidate_name, opponent_name,
-            '-n', nr_matches, '-f', 'sealed']
-
-
-def write_decklist(filename, decklist):
-    with open(filename, 'w') as file:
-        file.write(ct.DECKLIST_HEADER)
-        for card in decklist:
-            file.write(card + '\n')
-
-
-def evaluate_deck_by_wins(individual):
-    decklist = genome_to_decklist(individual)
-    filename = "candidate.dck"  # card_location + "\\" + str(time.time()).replace(".","")+'.dck'
-    write_decklist(filename, decklist)
-    total_damage = 0
-    wins = 0
-    # colors,lands = colorsymbols_in_deck(CARDS, decklist)
-
-    for opponent in ct.OPPONENTS:
-        cmd = build_cmd(filename, opponent, ct.MATCHES_PER_OPPONENT)
-        p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
-        for line in p.stdout:
-            line = line.decode("utf-8").strip()
-            if 'combat damage to Ai(2' in line:
-                hit_event = line.split(' ')
-                # print(hit_event) #For debugging
-                damage_index = hit_event.index('deals') + 1
-                damage = int(hit_event[damage_index])
-                total_damage += damage
-            if 'Match result' in line:
-                result = line.split(' ')
-                wins += int(result[3])
-        p.wait()
-        fitness = wins  # (wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
-    return fitness,  # MUST BE TUPLE!
 
 
 def init_individual(icls, content):
@@ -173,9 +129,8 @@ def main():
 
     alpha_deck = genome_to_decklist(alpha_deck[0])
 
-    # TODO: FIX THIS UGLY SHIT
-    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck)
 
+    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck)
     write_graph(top_list, median_list, worst_list)
 
 
