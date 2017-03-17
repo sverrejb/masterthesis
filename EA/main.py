@@ -12,7 +12,7 @@ from deap import tools
 from scoop import futures
 
 import constants as ct
-from experimentlogging import write_log, write_graph
+from logger import write_log, write_graph
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
