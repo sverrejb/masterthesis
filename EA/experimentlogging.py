@@ -1,25 +1,24 @@
 import datetime
+import constants as ct
 
 import matplotlib
-
 matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 
 
 # TODO: fix this ugly shit
-def write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, matches_per_opponent, opponents,
-              number_of_generations, popsize,
-              mutation_rate, crossover_rate, alpha_deck):
+def write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
     filename = str(datetime.datetime.now()) + '.txt'
     with open('results/' + filename, 'w') as file:
-        number_of_matches = int(matches_per_opponent) * len(opponents) * number_of_generations * popsize
+        number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
 
         file.write('Experiment log:\n')
-        file.write('Mutation rate: {}\n'.format(mutation_rate))
-        file.write('Crossover rate: {}\n'.format(crossover_rate))
-        file.write('Number of generations: {}\n'.format(number_of_generations))
-        file.write('Number of matches pr opponent: {}\n'.format(matches_per_opponent))
-        file.write('Number of opponents: {}\n'.format(len(opponents)))
+        file.write('Mutation rate: {}\n'.format(ct.MUTATION_RATE))
+        file.write('Crossover rate: {}\n'.format(ct.CROSSOVER_RATE))
+        file.write('Number of generations: {}\n'.format(ct.NUMBER_OF_GENERATIONS))
+        file.write('Number of matches pr opponent: {}\n'.format(ct.MATCHES_PER_OPPONENT))
+        file.write('Number of opponents: {}\n'.format(len(ct.OPPONENTS)))
         file.write('Total number of matches: {}\n'.format(number_of_matches))
         file.write('Time to complete: {}\n'.format(time_to_complete))
         file.write('Avg time per match: {}\n'.format(time_to_complete / number_of_matches))

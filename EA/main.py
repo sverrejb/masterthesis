@@ -1,7 +1,7 @@
 import copy
+import os
 import subprocess
 import time
-import os
 from random import randint
 from statistics import median
 
@@ -11,28 +11,8 @@ from deap import creator
 from deap import tools
 from scoop import futures
 
-import config
-from cards import read_card_pool,  colorsymbols_in_deck
+import constants as ct
 from experimentlogging import write_log, write_graph
-from read_json import read_cards_json
-
-POPSIZE = 10
-DECKSIZE = 40
-CROSSOVER_RATE = 0.1
-MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 1
-MATCHES_PER_OPPONENT = '1'  # must be string!
-CARD_POOL = read_card_pool('../AER-POOL-1.txt')
-CARD_POOL_SIZE = len(CARD_POOL)
-CARD_DIRECTORY = config.CARD_DIR
-FORGE_PATH = config.FORGE_DIR
-DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
-OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "UW-sealed-opponent.dck", "BGw-sealed-opponent.dck"]
-EXPERIMENT_FOLDER = str(datetime.datetime.now()).replace(":","-")
-gen = 0
-card_location = ""
-global CARDS
-CARDS = read_cards_json()
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -41,7 +21,7 @@ creator.create("Individual", list, fitness=creator.FitnessMax)
 def genome_to_decklist(individual):
     deck_list = []
     for c in individual:
-        deck_list.append(CARD_POOL[c][0])
+        deck_list.append(ct.CARD_POOL[c][0])
     return deck_list
 
 
@@ -58,7 +38,7 @@ def generate_individual(card_pool):
 
 def generate_first_generation_decks(card_pool):
     population = []
-    for i in range(POPSIZE):
+    for i in range(ct.POPSIZE):
         population.append(generate_individual(card_pool))
     return population
 
@@ -68,8 +48,8 @@ def mutate_deck(individual):
     mutation_site = randint(0, size - 1)
     mutated = False
     while not mutated:
-        new_gene = randint(0, CARD_POOL_SIZE - 1)
-        gene_limit = CARD_POOL[new_gene][1]
+        new_gene = randint(0, ct.CARD_POOL_SIZE - 1)
+        gene_limit = ct.CARD_POOL[new_gene][1]
         if individual.count(new_gene) < gene_limit:
             individual[mutation_site] = new_gene
             mutated = True
@@ -85,22 +65,22 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
 
 def write_decklist(filename, decklist):
     with open(filename, 'w') as file:
-        file.write(DECKLIST_HEADER)
+        file.write(ct.DECKLIST_HEADER)
         for card in decklist:
             file.write(card + '\n')
 
-a
+
 def evaluate_deck_by_wins(individual):
     decklist = genome_to_decklist(individual)
-    filename = "candidate.dck"                  #card_location + "\\" + str(time.time()).replace(".","")+'.dck'
+    filename = "candidate.dck"  # card_location + "\\" + str(time.time()).replace(".","")+'.dck'
     write_decklist(filename, decklist)
     total_damage = 0
     wins = 0
     # colors,lands = colorsymbols_in_deck(CARDS, decklist)
 
-    for opponent in OPPONENTS:
-        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
+    for opponent in ct.OPPONENTS:
+        cmd = build_cmd(filename, opponent, ct.MATCHES_PER_OPPONENT)
+        p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
             if 'combat damage to Ai(2' in line:
@@ -140,7 +120,7 @@ def main():
 
     start_time = time.time()
 
-    first_gen_decks = generate_first_generation_decks(CARD_POOL)
+    first_gen_decks = generate_first_generation_decks(ct.CARD_POOL)
 
     toolbox = base.Toolbox()
     toolbox.register("individual_deck", init_individual, creator.Individual)
@@ -154,22 +134,23 @@ def main():
     top_list = []
     median_list = []
     worst_list = []
-    os.makedirs(CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER)
+    os.makedirs(ct.CARD_DIRECTORY + "\\" + ct.EXPERIMENT_FOLDER)
     global_maximum = -10.0
     alpha_deck = []
 
-    for gen in range(NUMBER_OF_GENERATIONS):
-        offspring = algorithms.varAnd(population, toolbox, cxpb=CROSSOVER_RATE, mutpb=MUTATION_RATE)
+    for gen in range(ct.NUMBER_OF_GENERATIONS):
+        offspring = algorithms.varAnd(population, toolbox, cxpb=ct.CROSSOVER_RATE, mutpb=ct.MUTATION_RATE)
         fits = list(futures.map(toolbox.evaluate, offspring))
         print(fits)
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
-        card_location = CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER + "\\" + str(gen)
+        card_location = ct.CARD_DIRECTORY + "\\" + ct.EXPERIMENT_FOLDER + "\\" + str(gen)
         os.makedirs(card_location)
-    
-        for solution in population:
-            write_decklist(card_location + "\\" + str(counter)+'.dck', genome_to_decklist(solution))
+
+        counter = 0
+        for solution in population:  # TODO: use enumerate()?
+            write_decklist(card_location + "\\" + str(counter) + '.dck', genome_to_decklist(solution))
             counter += 1
         fitness_list = [x[0] for x in fits]
         maximum = max(fitness_list)
@@ -192,11 +173,8 @@ def main():
 
     alpha_deck = genome_to_decklist(alpha_deck[0])
 
-
     # TODO: FIX THIS UGLY SHIT
-    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS,
-              NUMBER_OF_GENERATIONS, POPSIZE,
-              MUTATION_RATE, CROSSOVER_RATE, alpha_deck)
+    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck)
 
     write_graph(top_list, median_list, worst_list)
 

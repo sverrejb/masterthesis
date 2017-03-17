@@ -17,20 +17,20 @@ def read_card_pool(filename):
 
 
 def color_symbols(CARDS, cardName):
-    colors =[CARDS[cardName]['manaCost'].count('W'),
-            CARDS[cardName]['manaCost'].count('U'),
-            CARDS[cardName]['manaCost'].count('B'),
-            CARDS[cardName]['manaCost'].count('R'),
-            CARDS[cardName]['manaCost'].count('G')] #WUBRG
+    colors = [CARDS[cardName]['manaCost'].count('W'),
+              CARDS[cardName]['manaCost'].count('U'),
+              CARDS[cardName]['manaCost'].count('B'),
+              CARDS[cardName]['manaCost'].count('R'),
+              CARDS[cardName]['manaCost'].count('G')]  # WUBRG
     return colors
 
 
 def land_symbols(CARDS, cardName):
     colors = [CARDS[cardName]['colorIdentity'].count('W'),
-            CARDS[cardName]['colorIdentity'].count('U'),
-            CARDS[cardName]['colorIdentity'].count('B'),
-            CARDS[cardName]['colorIdentity'].count('R'),
-            CARDS[cardName]['colorIdentity'].count('G')]    # WUBRG
+              CARDS[cardName]['colorIdentity'].count('U'),
+              CARDS[cardName]['colorIdentity'].count('B'),
+              CARDS[cardName]['colorIdentity'].count('R'),
+              CARDS[cardName]['colorIdentity'].count('G')]  # WUBRG
     return colors
 
 
@@ -51,4 +51,3 @@ def is_land(CARDS, cardName):
         return False
     else:
         return True
-
