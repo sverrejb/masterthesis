@@ -86,7 +86,7 @@ def main():
     median_list = []
     worst_list = []
     os.makedirs(ct.CARD_DIRECTORY + "\\" + ct.EXPERIMENT_FOLDER)
-    global_maximum = -10.0
+    global_maximum = 0
     alpha_deck = []
 
     for gen in range(ct.NUMBER_OF_GENERATIONS):
