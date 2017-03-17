@@ -2,25 +2,24 @@ import copy
 import subprocess
 import time
 from random import randint
+from statistics import median
 
 from deap import algorithms
 from deap import base
 from deap import creator
 from deap import tools
 from scoop import futures
-from statistics import median
 
 import config
 from cards import read_card_pool
 from experimentlogging import write_log, write_graph
 
-
 POPSIZE = 10
 DECKSIZE = 40
 CROSSOVER_RATE = 0.1
 MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 50
-MATCHES_PER_OPPONENT = '50'  # must be string!
+NUMBER_OF_GENERATIONS = 1
+MATCHES_PER_OPPONENT = '1'  # must be string!
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
@@ -162,6 +161,8 @@ def main():
     top_list = []
     median_list = []
     worst_list = []
+    global_maximum = -10.0
+    alpha_deck = []
 
     for gen in range(NUMBER_OF_GENERATIONS):
         offspring = algorithms.varAnd(population, toolbox, cxpb=CROSSOVER_RATE, mutpb=MUTATION_RATE)
@@ -172,19 +173,30 @@ def main():
         population = toolbox.select(offspring, k=len(population))
 
         fitness_list = [x[0] for x in fits]
-        top_list.append(max(fitness_list))
+        maximum = max(fitness_list)
+
+        strongest_individual = tools.selBest(population, k=1)
+
+        if maximum > global_maximum:
+            global_maximum = maximum
+            alpha_deck = strongest_individual
+
+        top_list.append(maximum)
         median_list.append(median(fitness_list))
         worst_list.append(min(fitness_list))
+
+    time_to_complete = (time.time() - start_time)
 
     top10 = tools.selBest(population, k=10)
     for i in range(len(top10)):
         print(i, top10[i].fitness.values)
 
-    time_to_complete = (time.time() - start_time)
+    alpha_deck = genome_to_decklist(alpha_deck[0])
 
     # TODO: FIX THIS UGLY SHIT
-    write_log(top_list, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS, NUMBER_OF_GENERATIONS, POPSIZE,
-              MUTATION_RATE, CROSSOVER_RATE)
+    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS,
+              NUMBER_OF_GENERATIONS, POPSIZE,
+              MUTATION_RATE, CROSSOVER_RATE, alpha_deck)
 
     write_graph(top_list, median_list, worst_list)
 
