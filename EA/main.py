@@ -1,6 +1,7 @@
 import copy
 import subprocess
 import time
+import os
 from random import randint
 
 from deap import algorithms
@@ -11,8 +12,9 @@ from scoop import futures
 from statistics import median
 
 import config
-from cards import read_card_pool
+from cards import read_card_pool,  colorsymbols_in_deck
 from experimentlogging import write_log, write_graph
+from read_json import read_cards_json
 
 
 POPSIZE = 10
@@ -27,6 +29,11 @@ CARD_DIRECTORY = config.CARD_DIR
 FORGE_PATH = config.FORGE_DIR
 DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "UW-sealed-opponent.dck", "BGw-sealed-opponent.dck"]
+EXPERIMENT_FOLDER = str(datetime.datetime.now()).replace(":","-")
+gen = 0
+card_location = ""
+global CARDS
+CARDS = read_cards_json()
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -77,16 +84,22 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
             '-n', nr_matches, '-f', 'sealed']
 
 
-def evaluate_deck_by_damage(individual):
+def write_decklist(filename, decklist):
+    with open(filename, 'w') as file:
+        file.write(DECKLIST_HEADER)
+        for card in decklist:
+            file.write(card + '\n')
+
+a
+def evaluate_deck_by_wins(individual):
     decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
+    filename = "candidate.dck"                  #card_location + "\\" + str(time.time()).replace(".","")+'.dck'
+    write_decklist(filename, decklist)
     total_damage = 0
     wins = 0
+    # colors,lands = colorsymbols_in_deck(CARDS, decklist)
+
     for opponent in OPPONENTS:
-        with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write(DECKLIST_HEADER)
-            for card in decklist:
-                file.write(card + '\n')
         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
@@ -101,27 +114,7 @@ def evaluate_deck_by_damage(individual):
                 result = line.split(' ')
                 wins += int(result[3])
         p.wait()
-        fitness = wins * total_damage  # (wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
-    return fitness,  # MUST BE TUPLE!
-
-
-def evaluate_deck_by_wins(individual):
-    decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
-    fitness = 0
-    for opponent in OPPONENTS:
-        with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write(DECKLIST_HEADER)
-            for card in decklist:
-                file.write(card + '\n')
-        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-        for line in p.stdout:
-            line = line.decode("utf-8").strip()
-            if 'Match result' in line:
-                result = line.split(' ')
-        p.wait()
-        fitness += int(result[3])
+        fitness = wins  # (wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
     return fitness,  # MUST BE TUPLE!
 
 
@@ -162,7 +155,8 @@ def main():
     top_list = []
     median_list = []
     worst_list = []
-
+    os.makedirs(CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER)
+    
     for gen in range(NUMBER_OF_GENERATIONS):
         offspring = algorithms.varAnd(population, toolbox, cxpb=CROSSOVER_RATE, mutpb=MUTATION_RATE)
         fits = list(futures.map(toolbox.evaluate, offspring))
@@ -170,7 +164,12 @@ def main():
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
-
+        card_location = CARD_DIRECTORY + "\\" + EXPERIMENT_FOLDER + "\\" + str(gen)
+        os.makedirs(card_location)
+    
+        for solution in population:
+            write_decklist(card_location + "\\" + str(counter)+'.dck', genome_to_decklist(solution))
+            counter += 1
         fitness_list = [x[0] for x in fits]
         top_list.append(max(fitness_list))
         median_list.append(median(fitness_list))
@@ -181,6 +180,7 @@ def main():
         print(i, top10[i].fitness.values)
 
     time_to_complete = (time.time() - start_time)
+
 
     # TODO: FIX THIS UGLY SHIT
     write_log(top_list, time_to_complete, MATCHES_PER_OPPONENT, OPPONENTS, NUMBER_OF_GENERATIONS, POPSIZE,
