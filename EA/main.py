@@ -19,9 +19,6 @@ creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 
-
-
-
 def generate_individual(card_pool):
     individual = []
     card_pool_size = len(card_pool)
