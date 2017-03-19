@@ -1,9 +1,16 @@
 import datetime
 import constants as ct
+from mail import send_mail
 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
+
+def log_experiment(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
+    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck)
+    write_graph(top_list, median_list, worst_list)
+    send_mail(['sverrejb@stud.ntnu.no'], 'Lorem Ipsum', ['results.png'])
 
 
 def write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
