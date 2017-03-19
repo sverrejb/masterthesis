@@ -17,6 +17,7 @@ def write_log(top_list, median_list, worst_list, global_maximum, time_to_complet
         file.write('Number of generations: {}\n'.format(ct.NUMBER_OF_GENERATIONS))
         file.write('Number of matches pr opponent: {}\n'.format(ct.MATCHES_PER_OPPONENT))
         file.write('Number of opponents: {}\n'.format(len(ct.OPPONENTS)))
+        file.write('Opponents: {}\n'.format(str(ct.OPPONENTS)))
         file.write('Total number of matches: {}\n'.format(number_of_matches))
         file.write('Time to complete: {}\n'.format(time_to_complete))
         file.write('Avg time per match: {}\n'.format(time_to_complete / number_of_matches))
