@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 def log_experiment(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
 
-    timestamp = str(datetime.datetime.now()) + '.txt'
+    timestamp = datetime.datetime.now().strftime("%d%m%H%M")
 
     write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, timestamp)
     write_graph(top_list, median_list, worst_list, timestamp)
