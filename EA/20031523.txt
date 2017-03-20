@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 57.08551383018494
+Avg time per match: 2.8542756915092466
+Strongest overall individual: 0
+Topscore for each generation:
+0.0, 
+Median score for each generation:
+0.0, 
+Worst score for each generation: 
+0.0, 
+Overall best deck: 
+Plains
+Druid of the Cowl
+Daring Demolition
+Forest
+Island
+Dispersal Technician
+Freejam Regent
+Night Market Lookout
+Plains
+Forest
+Enraged Giant
+Island
+Foundry Assembler
+Swamp
+Weldfast Wingsmith
+Plains
+Filigree Familiar
+Workshop Assistant
+Island
+Mountain
+Unlicensed Disintegration
+Forest
+Plains
+Swamp
+Implement of Examination
+Bastion Inventor
+Plains
+Elegant Edgecrafters
+Mountain
+Mountain
+Renegade's Getaway
+Swamp
+Cruel Finality
+Shock
+Forest
+Forest
+Vengeful Rebel
+Countless Gears Renegade
+Forest
+Swamp

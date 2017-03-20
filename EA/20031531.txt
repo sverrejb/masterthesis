@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 5
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 100
+Time to complete: 123.33902168273926
+Avg time per match: 1.2333902168273925
+Strongest overall individual: 3
+Topscore for each generation:
+30.0, 
+Median score for each generation:
+10.0, 
+Worst score for each generation: 
+0.0, 
+Overall best deck: 
+Lost Legacy
+Implement of Combustion
+Wily Bandar
+Swamp
+Forest
+Plains
+Weldfast Wingsmith
+Filigree Familiar
+Renegade Freighter
+Consulate Turret
+Island
+Island
+Forest
+Forest
+Island
+Kari Zev, Skyship Raider
+Plains
+Implement of Examination
+Night Market Lookout
+Fen Hauler
+Thriving Rhino
+Plains
+Indomitable Creativity
+Swamp
+Mountain
+Fen Hauler
+Embraal Gear-Smasher
+Filigree Crawler
+Mountain
+Countless Gears Renegade
+Mountain
+Cruel Finality
+Enraged Giant
+Plains
+Aether Theorist
+Workshop Assistant
+Mountain
+Elegant Edgecrafters
+Forest
+Forest

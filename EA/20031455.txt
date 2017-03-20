@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 3
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 60
+Time to complete: 167.1997640132904
+Avg time per match: 2.78666273355484
+Strongest overall individual: 2
+Topscore for each generation:
+50.0, 100.0, 100.0, 
+Median score for each generation:
+0.0, 0.0, 0.0, 
+Worst score for each generation: 
+0.0, 0.0, 0.0, 
+Overall best deck: 
+Countless Gears Renegade
+Glint-Sleeve Artisan
+Revoke Privileges
+Aether Swooper
+Bastion Inventor
+Dispersal Technician
+Dispersal Technician
+Failed Inspection
+Hinterland Drake
+Negate
+Take into Custody
+Vedalken Blademaster
+Lost Legacy
+Gonti's Machinations
+Aether Poisoner
+Fen Hauler
+Fortuitous Find
+Renegade's Getaway
+Renegade's Getaway
+Thriving Rats
+Chandra, Torch of Defiance
+Freejam Regent
+Aethertorch Renegade
+scrapper champion
+Invigorated Rampage
+Chandra's Revolution
+Reckless Fireweaver
+Wrangle
+Commencement of Festivities
+Druid of the Cowl
+Silkweaver Elite
+Hidden Stockpile
+Unlicensed Disintegration
+Aethersphere Harvester
+Daredevil Dragster
+Consulate Turret
+Renegade Freighter
+Reservoir Walker
+Verdant Automaton
+Sequestered Stash

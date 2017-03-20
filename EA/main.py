@@ -8,7 +8,7 @@ from deap import algorithms
 from deap import base
 from deap import creator
 from deap import tools
-from scoop import futures
+#from scoop import futures
 
 import constants as ct
 from decks import genome_to_decklist, write_decklist
@@ -91,9 +91,10 @@ def main():
 
     for gen in range(ct.NUMBER_OF_GENERATIONS):
         offspring = algorithms.varAnd(population, toolbox, cxpb=ct.CROSSOVER_RATE, mutpb=ct.MUTATION_RATE)
-        fits = list(futures.map(toolbox.evaluate, offspring))
+        fits = list(map(toolbox.evaluate, offspring))  #list(futures.map(toolbox.evaluate, offspring))
         print(fits)
         for fit, ind in zip(fits, offspring):
+            print(fit)
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
         card_location = ct.CARD_DIRECTORY + "/" + ct.EXPERIMENT_FOLDER + "/" + str(gen)
@@ -108,7 +109,7 @@ def main():
 
         strongest_individual = tools.selBest(population, k=1)
 
-        if maximum > global_maximum:
+        if maximum >= global_maximum:
             global_maximum = maximum
             alpha_deck = strongest_individual
 

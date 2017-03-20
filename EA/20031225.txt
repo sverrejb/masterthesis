@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 50.860360860824585
+Avg time per match: 2.5430180430412292
+Strongest overall individual: 1
+Topscore for each generation:
+1, 
+Median score for each generation:
+0.0, 
+Worst score for each generation: 
+0, 
+Overall best deck: 
+Keldon Marauders
+Stingscourger
+Tooth and Claw
+Blood Artist
+Swiftwater Cliffs
+Night's Whisper
+Roar of the Wurm
+Blossoming Sands
+Trygon Predator
+Abundant Growth
+Tranquil Cove
+Squadron Hawk
+Animate Dead
+Sulfuric Vortex
+Yavimaya Enchantress
+Brago, King Eternal
+Jetting Glasskite
+Mogg Fanatic
+Kird Ape
+Civic Wayfinder
+Honden of Cleansing Fire
+Swiftwater Cliffs
+Invigorate
+Shoreline Ranger
+Flinthoof Boar
+Plague Witch
+Kor Hookmaster
+Screeching Skaab
+Unexpectedly Absent
+Young Pyromancer
+Undying Rage
+Blossoming Sands
+Wakedancer
+Daze
+Rally the Peasants
+Skulking Ghost
+Gravedigger
+Eyeblight's Ending
+Pacifism
+Werebear

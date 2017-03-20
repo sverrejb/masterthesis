@@ -18,12 +18,12 @@ def evaluate_deck_by_wins(individual):
     total_damage = 0
     wins = 0
     # colors,lands = colorsymbols_in_deck(CARDS, decklist)
-
     for opponent in ct.OPPONENTS:
         cmd = build_cmd(filename, opponent, ct.MATCHES_PER_OPPONENT)
         p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
+            #print(line)
             # if 'combat damage to Ai(2' in line:
             #     hit_event = line.split(' ')
             #     # print(hit_event) #For debugging

@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 60.031789779663086
+Avg time per match: 3.0015894889831545
+Strongest overall individual: 2
+Topscore for each generation:
+2, 
+Median score for each generation:
+1.0, 
+Worst score for each generation: 
+0, 
+Overall best deck: 
+Inventor's Apprentice
+Sage of Shaila's Claim
+Island
+Swamp
+Island
+Island
+Plains
+Vedalken Blademaster
+Augmenting Automaton
+Swamp
+Swamp
+Forest
+Revoke Privileges
+Leave in the Dust
+Plains
+Shock
+Island
+Forest
+Daring Demolition
+Lathnu Sailback
+Forest
+Gifted Aetherborn
+Forest
+Forest
+Forest
+Island
+Prakhata Pillar-Bug
+Bastion Enforcer
+Irontread Crusher
+Gearshift Ace
+Conviction
+Swamp
+Forest
+Swamp
+Plains
+Island
+Plains
+Swamp
+Oath of Ajani
+Plains

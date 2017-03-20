@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 62.98994207382202
+Avg time per match: 3.1494971036911013
+Strongest overall individual: 2
+Topscore for each generation:
+2, 
+Median score for each generation:
+0.0, 
+Worst score for each generation: 
+0, 
+Overall best deck: 
+Ghirapur Osprey
+Mountain
+Alley Evasion
+Prakhata Pillar-Bug
+Island
+Plains
+Plains
+Forest
+Wrangle
+Hinterland Drake
+Daring Demolition
+Universal Solvent
+Swamp
+Forest
+Cloudblazer
+Subtle Strike
+Swamp
+Mountain
+Island
+Swamp
+Built to Last
+Forest
+Swamp
+Diabolic Tutor
+Shock
+Augmenting Automaton
+Renegade Wheelsmith
+Implement of Malice
+Dawnfeather Eagle
+Aether Chaser
+Oath of Ajani
+Swamp
+Alley Evasion
+Dhund Operative
+Mountain
+Inventor's Apprentice
+Night Market Lookout
+Plains
+Lathnu Sailback
+Aether Herder

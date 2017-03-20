@@ -8,9 +8,11 @@ import matplotlib.pyplot as plt
 
 
 def log_experiment(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
-
+    matches_per_generation = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS)
     timestamp = datetime.datetime.now().strftime("%d%m%H%M")
-
+    top_list[:] = [(x / float(matches_per_generation)) * 100 for x in top_list]
+    median_list[:] = [(x / float(matches_per_generation)) * 100 for x in median_list]
+    worst_list[:] = [(x / float(matches_per_generation)) * 100 for x in worst_list]
     write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, timestamp)
     write_graph(top_list, median_list, worst_list, timestamp)
     send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'], 'See attached files', [timestamp + '.png', timestamp + '.txt'])
@@ -20,6 +22,7 @@ def write_log(top_list, median_list, worst_list, global_maximum, time_to_complet
     filename = timestamp + '.txt'
     with open(filename, 'w') as file:
         number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
+
 
         file.write('Experiment log:\n')
         file.write('Mutation rate: {}\n'.format(ct.MUTATION_RATE))
@@ -50,7 +53,7 @@ def write_log(top_list, median_list, worst_list, global_maximum, time_to_complet
 
 def write_graph(top_list, median_list, worst_list, timestamp):
     filename = timestamp + '.png'
-    plt.plot(top_list, 'blue')
+    plt.plot((top_list), 'blue')
     plt.plot(median_list, 'green')
     plt.plot(worst_list, 'red')
     plt.legend(['Strongest', 'Median', 'Worst'], loc='upper left')
