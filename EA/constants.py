@@ -16,5 +16,5 @@ FORGE_PATH = config.FORGE_DIR
 DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
 # OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "UW-sealed-opponent.dck", "BGw-sealed-opponent.dck"]
-EXPERIMENT_FOLDER = str(datetime.datetime.now()).replace(":", "-")
+EXPERIMENT_FOLDER = datetime.datetime.now().strftime("%d%m%H%M")
 CARDS = read_cards_json()

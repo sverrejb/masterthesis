@@ -85,7 +85,7 @@ def main():
     top_list = []
     median_list = []
     worst_list = []
-    os.makedirs(ct.CARD_DIRECTORY + "\\" + ct.EXPERIMENT_FOLDER)
+    os.makedirs(ct.CARD_DIRECTORY + "/" + ct.EXPERIMENT_FOLDER)
     global_maximum = 0
     alpha_deck = []
 
@@ -96,12 +96,12 @@ def main():
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
-        card_location = ct.CARD_DIRECTORY + "\\" + ct.EXPERIMENT_FOLDER + "\\" + str(gen)
+        card_location = ct.CARD_DIRECTORY + "/" + ct.EXPERIMENT_FOLDER + "/" + str(gen)
         os.makedirs(card_location)
 
         counter = 0
         for solution in population:  # TODO: use enumerate()?
-            write_decklist(card_location + "\\" + str(counter) + '.dck', genome_to_decklist(solution))
+            write_decklist(card_location + "/" + str(counter) + '.dck', genome_to_decklist(solution))
             counter += 1
         fitness_list = [x[0] for x in fits]
         maximum = max(fitness_list)
