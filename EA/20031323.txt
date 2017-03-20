@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 3
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 60
+Time to complete: 164.99215030670166
+Avg time per match: 2.749869171778361
+Strongest overall individual: 2
+Topscore for each generation:
+1.6666666666666667, 3.3333333333333335, 0.0, 
+Median score for each generation:
+0.0, 1.6666666666666667, 0.0, 
+Worst score for each generation: 
+0.0, 0.0, 0.0, 
+Overall best deck: 
+Filigree Familiar
+Consulate Turret
+Aether Swooper
+Failed Inspection
+Hinterland Drake
+Aethersphere Harvester
+Night Market Lookout
+Countless Gears Renegade
+Elegant Edgecrafters
+Freejam Regent
+Renegade Freighter
+Highspire Artisan
+Revoke Privileges
+Implement of Combustion
+Cruel Finality
+Wrangle
+scrapper champion
+Aethertorch Renegade
+Glint-Sleeve Artisan
+Dawnfeather Eagle
+Aether Theorist
+Vedalken Blademaster
+Implement of Examination
+Druid of the Cowl
+Hijack
+Resourceful Return
+Maulfist Squad
+Weldfast Wingsmith
+Silkweaver Elite
+Daring Demolition
+Aether Poisoner
+Hidden Stockpile
+Dispersal Technician
+Accomplished Automaton
+Indomitable Creativity
+Kari Zev's Expertise
+Foundry Assembler
+Thriving Rats
+Bastion Inventor
+Alley Evasion

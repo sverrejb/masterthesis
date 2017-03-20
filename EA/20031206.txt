@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 55.96945762634277
+Avg time per match: 2.7984728813171387
+Strongest overall individual: 1
+Topscore for each generation:
+1, 
+Median score for each generation:
+1.0, 
+Worst score for each generation: 
+0, 
+Overall best deck: 
+Fen Hauler
+Plains
+Plains
+Forest
+Shielded Aether Thief
+Trophy Mage
+Swamp
+Built to Last
+Island
+Druid of the Cowl
+Forest
+Gearshift Ace
+Renegade Wheelsmith
+Oath of Ajani
+Concealed Courtyard
+Fragmentize
+Plains
+Renegade Map
+Consulate Turret
+Forest
+Irontread Crusher
+Island
+Mountain
+Forest
+Plains
+Dispersal Technician
+Dukhara Scavenger
+Foundry Hornet
+Negate
+Daring Demolition
+Plains
+Swamp
+Mountain
+Reservoir Walker
+Prakhata Pillar-Bug
+Island
+Swamp
+Island
+Plains
+Mountain

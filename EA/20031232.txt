@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 59.51217770576477
+Avg time per match: 2.9756088852882385
+Strongest overall individual: 1
+Topscore for each generation:
+1, 
+Median score for each generation:
+0.0, 
+Worst score for each generation: 
+0, 
+Overall best deck: 
+Fen Hauler
+Embraal Gear-Smasher
+Curio Vendor
+Reckless Fireweaver
+Weldfast Wingsmith
+Renegade Rallier
+Consulate Turret
+Night Market Lookout
+Audacious Infiltrator
+Dawnfeather Eagle
+Glint-Sleeve Artisan
+Negate
+Audacious Infiltrator
+Fen Hauler
+Aether Poisoner
+Shock
+Efficient Construction
+Renegade Freighter
+Caught in the Brights
+Thriving Rhino
+Daring Demolition
+Maulfist Squad
+Invigorated Rampage
+scrapper champion
+Revoke Privileges
+Implement of Combustion
+Druid of the Cowl
+Failed Inspection
+Aether Theorist
+Aethersphere Harvester
+Negate
+Renegade's Getaway
+Wrangle
+Hijack
+Kari Zev's Expertise
+Wily Bandar
+Countless Gears Renegade
+Indomitable Creativity
+Elegant Edgecrafters
+Vengeful Rebel

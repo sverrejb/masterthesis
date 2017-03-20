@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 3
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 60
+Time to complete: 174.73666095733643
+Avg time per match: 2.912277682622274
+Strongest overall individual: 2
+Topscore for each generation:
+50.0, 100.0, 100.0, 
+Median score for each generation:
+0.0, 0.0, 0.0, 
+Worst score for each generation: 
+0.0, 0.0, 0.0, 
+Overall best deck: 
+Implement of Combustion
+Shock
+Druid of the Cowl
+scrapper champion
+Wily Bandar
+Elegant Edgecrafters
+Reckless Fireweaver
+Negate
+Daredevil Dragster
+Renegade Freighter
+Unlicensed Disintegration
+Countless Gears Renegade
+Renegade Rallier
+Silkweaver Elite
+Negate
+Reservoir Walker
+Accomplished Automaton
+Dawnfeather Eagle
+Deft Dismissal
+Wind-Kin Raiders
+Ovalchase Daredevil
+Hidden Stockpile
+Gonti's Machinations
+Workshop Assistant
+Failed Inspection
+Invigorated Rampage
+Augmenting Automaton
+Glint-Sleeve Artisan
+Indomitable Creativity
+Bastion Inventor
+Resourceful Return
+Fen Hauler
+Wrangle
+Freejam Regent
+Daring Demolition
+Lost Legacy
+Dispersal Technician
+Chandra's Revolution
+Kari Zev, Skyship Raider
+Chandra's Revolution
