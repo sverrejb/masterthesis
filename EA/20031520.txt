@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 43.42841339111328
+Avg time per match: 2.171420669555664
+Strongest overall individual: 0
+Topscore for each generation:
+0.0, 
+Median score for each generation:
+0.0, 
+Worst score for each generation: 
+0.0, 
+Overall best deck: 
+Ovalchase Daredevil
+Gonti's Machinations
+Weldfast Wingsmith
+Implement of Combustion
+Consulate Turret
+Shock
+Aether Poisoner
+Wily Bandar
+Aethertorch Renegade
+Commencement of Festivities
+Thriving Rhino
+Reckless Fireweaver
+Kari Zev's Expertise
+Renegade Freighter
+Renegade's Getaway
+Highspire Artisan
+Sequestered Stash
+Daring Demolition
+Indomitable Creativity
+Aether Theorist
+Glint-Sleeve Artisan
+Implement of Examination
+Renegade's Getaway
+Failed Inspection
+Elegant Edgecrafters
+Druid of the Cowl
+Cruel Finality
+Invigorated Rampage
+Thriving Rats
+Resourceful Return
+Freejam Regent
+Chandra's Revolution
+Filigree Familiar
+Vengeful Rebel
+Hinterland Drake
+Augmenting Automaton
+Reservoir Walker
+Accomplished Automaton
+Maulfist Squad
+Enraged Giant

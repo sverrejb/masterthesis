@@ -23,7 +23,7 @@ def evaluate_deck_by_wins(individual):
         p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
-            print(line)
+            #print(line)
             # if 'combat damage to Ai(2' in line:
             #     hit_event = line.split(' ')
             #     # print(hit_event) #For debugging

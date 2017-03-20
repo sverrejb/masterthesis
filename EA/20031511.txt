@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.1
+Number of generations: 1
+Number of matches pr opponent: 1
+Number of opponents: 2
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck']
+Total number of matches: 20
+Time to complete: 64.55174088478088
+Avg time per match: 3.227587044239044
+Strongest overall individual: 1
+Topscore for each generation:
+50.0, 
+Median score for each generation:
+0.0, 
+Worst score for each generation: 
+0.0, 
+Overall best deck: 
+Workshop Assistant
+Wrangle
+Take into Custody
+Chandra's Revolution
+Fen Hauler
+Aether Swooper
+Ovalchase Daredevil
+Renegade Rallier
+Sequestered Stash
+Kari Zev, Skyship Raider
+Alley Evasion
+Druid of the Cowl
+Curio Vendor
+Hidden Stockpile
+Enraged Giant
+Wind-Kin Raiders
+Daredevil Dragster
+Unlicensed Disintegration
+Audacious Infiltrator
+Verdant Automaton
+Wily Bandar
+Augmenting Automaton
+Resourceful Return
+Vengeful Rebel
+Weldfast Wingsmith
+Dispersal Technician
+Foundry Assembler
+Bastion Inventor
+Shock
+Highspire Artisan
+Fen Hauler
+Filigree Crawler
+Fortuitous Find
+Implement of Combustion
+Silkweaver Elite
+Aethertorch Renegade
+Countless Gears Renegade
+Aether Theorist
+Embraal Gear-Smasher
+Aethersphere Harvester

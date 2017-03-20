@@ -109,7 +109,7 @@ def main():
 
         strongest_individual = tools.selBest(population, k=1)
 
-        if maximum > global_maximum:
+        if maximum >= global_maximum:
             global_maximum = maximum
             alpha_deck = strongest_individual
 

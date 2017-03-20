@@ -9,6 +9,7 @@ def genome_to_decklist(individual):
 
 
 def write_decklist(filename, decklist):
+    print(filename)
     with open(filename, 'w') as file:
         file.write(ct.DECKLIST_HEADER)
         for card in decklist:
