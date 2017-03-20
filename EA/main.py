@@ -13,7 +13,7 @@ from scoop import futures
 import constants as ct
 from decks import genome_to_decklist, write_decklist
 from fitness import evaluate_deck_by_wins
-from logger import write_log, write_graph
+from logger import log_experiment
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -116,7 +116,7 @@ def main():
         median_list.append(median(fitness_list))
         worst_list.append(min(fitness_list))
 
-    time_to_complete = (time.time() - start_time)
+    runtime = (time.time() - start_time)
 
     top10 = tools.selBest(population, k=10)
     for i in range(len(top10)):
@@ -124,9 +124,7 @@ def main():
 
     alpha_deck = genome_to_decklist(alpha_deck[0])
 
-    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck)
-    write_graph(top_list, median_list, worst_list)
-
+    log_experiment(top_list, median_list, worst_list, global_maximum, runtime, alpha_deck)
 
 if __name__ == '__main__':
     main()
