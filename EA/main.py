@@ -14,6 +14,7 @@ import constants as ct
 from decks import genome_to_decklist, write_decklist
 from fitness import evaluate_deck_by_wins
 from logger import log_experiment
+from mail import send_mail
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
@@ -127,4 +128,9 @@ def main():
     log_experiment(top_list, median_list, worst_list, global_maximum, runtime, alpha_deck)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print("Unexpected error:\n{}".format(e))
+        send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'], "The program has crashed:\n{}".format(e))
+
