@@ -92,9 +92,8 @@ def main():
     for gen in range(ct.NUMBER_OF_GENERATIONS):
         offspring = algorithms.varAnd(population, toolbox, cxpb=ct.CROSSOVER_RATE, mutpb=ct.MUTATION_RATE)
         fits = list(futures.map(toolbox.evaluate, offspring))
-        print(fits)
+        print("Generation {}, {}".format(gen, fits))
         for fit, ind in zip(fits, offspring):
-            print(fit)
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
         card_location = ct.CARD_DIRECTORY + "/" + ct.EXPERIMENT_FOLDER + "/" + str(gen)

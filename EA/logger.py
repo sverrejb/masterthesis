@@ -23,7 +23,6 @@ def write_log(top_list, median_list, worst_list, global_maximum, time_to_complet
     with open(filename, 'w') as file:
         number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
 
-
         file.write('Experiment log:\n')
         file.write('Mutation rate: {}\n'.format(ct.MUTATION_RATE))
         file.write('Crossover rate: {}\n'.format(ct.CROSSOVER_RATE))
