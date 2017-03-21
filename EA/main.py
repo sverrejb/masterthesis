@@ -71,6 +71,8 @@ def mate_individuals(ind1, ind2):
 def main():
     # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
 
+    print('Starting experiment {}'.format(ct.EXPERIMENT_TIMESTAMP))
+
     start_time = time.time()
     first_gen_decks = generate_first_generation_decks(ct.CARD_POOL)
 
@@ -86,7 +88,7 @@ def main():
     top_list = []
     median_list = []
     worst_list = []
-    os.makedirs(ct.CARD_DIRECTORY + "/" + ct.EXPERIMENT_FOLDER)
+    os.makedirs(ct.EXPERIMENT_FOLDER)
     global_maximum = 0
     alpha_deck = []
 
@@ -97,7 +99,7 @@ def main():
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))
-        card_location = ct.CARD_DIRECTORY + "/" + ct.EXPERIMENT_FOLDER + "/" + str(gen)
+        card_location = ct.EXPERIMENT_FOLDER + "/" + str(gen)
         os.makedirs(card_location)
 
         counter = 0

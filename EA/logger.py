@@ -11,20 +11,20 @@ import matplotlib.pyplot as plt
 
 def log_experiment(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
     matches_per_generation = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS)
-    timestamp = datetime.datetime.now().strftime("%d%m%H%M")
+    log_name = ct.EXPERIMENT_TIMESTAMP + '.txt'
+    graph_name = ct.EXPERIMENT_TIMESTAMP + '.png'
     top_list[:] = [(x / float(matches_per_generation)) * 100 for x in top_list]
     median_list[:] = [(x / float(matches_per_generation)) * 100 for x in median_list]
     worst_list[:] = [(x / float(matches_per_generation)) * 100 for x in worst_list]
-    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, timestamp)
-    write_graph(top_list, median_list, worst_list, timestamp)
+    write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, log_name)
+    write_graph(top_list, median_list, worst_list, graph_name)
     send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'],
-              'Experiment {} terminated. See attached files'.format(ct.EXPERIMENT_FOLDER),
-              [timestamp + '.png', timestamp + '.txt'])
+              'Experiment {} terminated. See attached files'.format(ct.EXPERIMENT_TIMESTAMP),
+              [ct.EXPERIMENT_FOLDER + '/' + log_name, ct.EXPERIMENT_FOLDER + '/' + graph_name])
 
 
-def write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, timestamp):
-    filename = timestamp + '.txt'
-    with open(filename, 'w') as file:
+def write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, filename):
+    with open(ct.EXPERIMENT_FOLDER + '/' + filename, 'w') as file:
         number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
 
         file.write('Experiment log:\n')
@@ -54,10 +54,12 @@ def write_log(top_list, median_list, worst_list, global_maximum, time_to_complet
             file.write("{}\n".format(card))
 
 
-def write_graph(top_list, median_list, worst_list, timestamp):
-    filename = timestamp + '.png'
+def write_graph(top_list, median_list, worst_list, filename):
+
     plt.plot((top_list), 'blue')
     plt.plot(median_list, 'green')
     plt.plot(worst_list, 'red')
+    plt.xlabel('Generations')
+    plt.ylabel('Win percentage')
     plt.legend(['Strongest', 'Median', 'Worst'], loc='upper left')
-    plt.savefig(filename)
+    plt.savefig(ct.EXPERIMENT_FOLDER + '/' + filename)

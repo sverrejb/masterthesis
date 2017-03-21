@@ -13,7 +13,7 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
 
 def evaluate_deck_by_wins(individual):
     decklist = genome_to_decklist(individual)
-    filename = "candidate.dck"  # card_location + "\\" + str(time.time()).replace(".","")+'.dck'
+    filename = "candidate.dck"
     write_decklist(ct.CARD_DIRECTORY + filename, decklist)
     total_damage = 0
     wins = 0
