@@ -57,8 +57,7 @@ def write_log(top_list, median_list, worst_list, global_maximum, time_to_complet
 
 
 def write_graph(top_list, median_list, worst_list, filename):
-
-    plt.plot((top_list), 'blue')
+    plt.plot(top_list, 'blue')
     plt.plot(median_list, 'green')
     plt.plot(worst_list, 'red')
     plt.xlabel('Generations')
