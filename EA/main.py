@@ -1,40 +1,23 @@
 import copy
-import subprocess
+import os
 import time
 from random import randint
+from statistics import median
 
 from deap import algorithms
 from deap import base
 from deap import creator
-
-import datetime
 from deap import tools
+from scoop import futures
 
-import config
-from cards import read_card_pool
-
-import matplotlib.pyplot as plt
-
+import constants as ct
+from decks import genome_to_decklist, write_decklist
+from fitness import evaluate_deck_by_wins
+from logger import log_experiment
+from mail import send_mail
 
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
-
-POPSIZE = 10
-DECKSIZE = 40
-NUMBER_OF_GENERATIONS = 1
-MATCHES_PER_OPPONENT = '10'
-CARD_POOL = read_card_pool('../AER-POOL-1.txt')
-CARD_POOL_SIZE = len(CARD_POOL)
-CARD_DIRECTORY = config.CARD_DIR
-FORGE_PATH = config.FORGE_DIR
-DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
-
-
-def genome_to_decklist(individual):
-    deck_list = []
-    for c in individual:
-        deck_list.append(CARD_POOL[c][0])
-    return deck_list
 
 
 def generate_individual(card_pool):
@@ -50,7 +33,7 @@ def generate_individual(card_pool):
 
 def generate_first_generation_decks(card_pool):
     population = []
-    for i in range(POPSIZE):
+    for i in range(ct.POPSIZE):
         population.append(generate_individual(card_pool))
     return population
 
@@ -60,75 +43,12 @@ def mutate_deck(individual):
     mutation_site = randint(0, size - 1)
     mutated = False
     while not mutated:
-        new_gene = randint(0, CARD_POOL_SIZE - 1)
-        gene_limit = CARD_POOL[new_gene][1]
+        new_gene = randint(0, ct.CARD_POOL_SIZE - 1)
+        gene_limit = ct.CARD_POOL[new_gene][1]
         if individual.count(new_gene) < gene_limit:
             individual[mutation_site] = new_gene
             mutated = True
     return individual,  # MUST RETURN TUPLE
-
-
-def build_cmd(candidate_name, opponent_name, nr_matches):
-    return ['java', '-Xmx1024m', '-jar',
-            'forge-gui-desktop-1.5.61-SNAPSHOT-jar-with-dependencies.jar', 'sim',
-            '-d', candidate_name, opponent_name,
-            '-n', nr_matches, '-f', 'sealed']
-
-
-def evaluate_deck_by_damage(individual):
-    decklist = genome_to_decklist(individual)
-    filename = 'candidate.dck'
-    total_damage = 0
-    wins = 0
-    opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-    for opponent in opponents:
-        with open(CARD_DIRECTORY + filename, 'w') as file:
-            file.write(DECKLIST_HEADER)
-            for card in decklist:
-                file.write(card + '\n')
-
-        cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-        p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-        for line in p.stdout:
-            line = line.decode("utf-8").strip()
-            if 'combat damage to Ai(2' in line:
-                hit_event = line.split(' ')
-                #print(hit_event) #For debugging
-                damage_index = hit_event.index('deals') + 1
-                damage = int(hit_event[damage_index])
-                total_damage += damage
-            if 'Match result' in line:
-                result = line.split(' ')
-                wins += int(result[3])
-
-        p.wait()
-        fitness = wins * total_damage   #(wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
-    return fitness,  # MUST BE TUPLE!
-
-
-# def evaluate_deck(individual):
-#     decklist = genome_to_decklist(individual)
-#     filename = 'candidate.dck'
-#     # opponent = 'Merfolk.dck'
-#     fitness = 0
-#     opponents = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck"]
-#     for opponent in opponents:
-#         with open(CARD_DIRECTORY + filename, 'w') as file:
-#             file.write(DECKLIST_HEADER)
-#             for card in decklist:
-#                 file.write(card + '\n')
-#
-#         cmd = build_cmd(filename, opponent, MATCHES_PER_OPPONENT)
-#
-#         p = subprocess.Popen(cmd, cwd=FORGE_PATH, stdout=subprocess.PIPE)
-#         for line in p.stdout:
-#             line = line.decode("utf-8").strip()
-#             if 'Match result' in line:
-#                 result = line.split(' ')
-#         p.wait()
-#         fitness += int(result[3])
-#     # print(fitness)
-#     return fitness,  # MUST BE TUPLE!
 
 
 def init_individual(icls, content):
@@ -148,53 +68,83 @@ def mate_individuals(ind1, ind2):
     return ind1, ind2
 
 
-first_gen_decks = generate_first_generation_decks(CARD_POOL)
+def main():
+    # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+    number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
+    print('Starting experiment {}'.format(ct.EXPERIMENT_TIMESTAMP))
+    print('Doing {} matches'.format(number_of_matches))
 
-toolbox = base.Toolbox()
+    start_time = time.time()
+    first_gen_decks = generate_first_generation_decks(ct.CARD_POOL)
 
-toolbox.register("individual_deck", init_individual, creator.Individual)
-toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
+    toolbox = base.Toolbox()
+    toolbox.register("individual_deck", init_individual, creator.Individual)
+    toolbox.register("card_population", init_population, list, toolbox.individual_deck, first_gen_decks)
+    toolbox.register("evaluate", evaluate_deck_by_wins)
+    toolbox.register("mate", mate_individuals)
+    toolbox.register("mutate", mutate_deck)
+    toolbox.register("select", tools.selTournament, tournsize=3)
 
-toolbox.register("evaluate", evaluate_deck_by_damage)
-toolbox.register("mate", mate_individuals)
-toolbox.register("mutate", mutate_deck)
-toolbox.register("select", tools.selTournament, tournsize=3)
+    population = toolbox.card_population()
+    top_list = []
+    median_list = []
+    worst_list = []
+    os.makedirs(ct.EXPERIMENT_FOLDER)
+    global_maximum = 0
+    best_median = 0
+    last_improvement = 0
+    alpha_deck = []
 
-# TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+    for gen in range(ct.NUMBER_OF_GENERATIONS):
+        offspring = algorithms.varAnd(population, toolbox, cxpb=ct.CROSSOVER_RATE, mutpb=ct.MUTATION_RATE)
+        fits = list(futures.map(toolbox.evaluate, offspring))
+        print("Generation {}, {}".format(gen, fits))
+        for fit, ind in zip(fits, offspring):
+            ind.fitness.values = fit
+        population = toolbox.select(offspring, k=len(population))
+        card_location = ct.EXPERIMENT_FOLDER + "/" + str(gen)
+        os.makedirs(card_location)
 
-# TODO: VURDER fitnessfunksjon til å returnere skade på motstander, evt antall hits på motstander
+        for i, solution in enumerate(population):
+            write_decklist(card_location + "/" + str(i) + '.dck', genome_to_decklist(solution))
+        fitness_list = [x[0] for x in fits]
+        maximum = max(fitness_list)
 
-population = toolbox.card_population()
-start_time = time.time()
+        strongest_individual = tools.selBest(population, k=1)
 
-top1_list = []
+        median_score = median(fitness_list)
+        if median_score > best_median:
+            best_median = median_score
+            last_improvement = gen
 
-for gen in range(NUMBER_OF_GENERATIONS):
-    offspring = algorithms.varAnd(population, toolbox, cxpb=0.1, mutpb=0.2)
-    fits = list(toolbox.map(toolbox.evaluate, offspring))
-    print(list(fits))
-    for fit, ind in zip(fits, offspring):
-        ind.fitness.values = fit
-    population = toolbox.select(offspring, k=len(population))
-    top1 = tools.selBest(population, k=1)
-    top1_list.append(top1)
+        if maximum >= global_maximum:
+            global_maximum = maximum
+            alpha_deck = strongest_individual
 
-top10 = tools.selBest(population, k=10)
-for i in range(len(top10)):
-    print(i, top10[i].fitness.values)
+        if median_score >= 65:
+            break
 
-print(time.time() - start_time)
+        if gen - last_improvement > 60:
+            break
 
-fitness_list = []
-for generation in top1_list:
-    for ind in generation:
-        fitness_list.append(ind.fitness.values)
-print(fitness_list)
-print(type(fitness_list[0]))
+        top_list.append(maximum)
+        median_list.append(median_score)
+        worst_list.append(min(fitness_list))
 
-image_name = str(datetime.datetime.now()) + '.png'
+    runtime = (time.time() - start_time)
 
-plt.plot([x[0] for x in fitness_list])
-plt.ylabel('some numbers')
-plt.savefig(image_name)
+    top10 = tools.selBest(population, k=10)
+    for i in range(len(top10)):
+        print(i, top10[i].fitness.values)
+
+    alpha_deck = genome_to_decklist(alpha_deck[0])
+
+    log_experiment(top_list, median_list, worst_list, global_maximum, runtime, alpha_deck)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as e:
+        print("Unexpected error:\n{}".format(e))
+        send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'], "The program has crashed:\n{}".format(e))
 
