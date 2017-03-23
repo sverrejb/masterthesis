@@ -17,7 +17,6 @@ def evaluate_deck_by_wins(individual):
     write_decklist(ct.CARD_DIRECTORY + filename, decklist)
     total_damage = 0
     wins = 0
-    # colors,lands = colorsymbols_in_deck(CARDS, decklist)
     for opponent in ct.OPPONENTS:
         cmd = build_cmd(filename, opponent, ct.MATCHES_PER_OPPONENT)
         p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)

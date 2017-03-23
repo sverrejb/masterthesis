@@ -96,6 +96,7 @@ def main():
         offspring = algorithms.varAnd(population, toolbox, cxpb=ct.CROSSOVER_RATE, mutpb=ct.MUTATION_RATE)
         fits = list(futures.map(toolbox.evaluate, offspring))
         print("Generation {}, {}".format(gen, fits))
+
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
         population = toolbox.select(offspring, k=len(population))

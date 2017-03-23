@@ -6,7 +6,9 @@ import constants as ct
 from mail import send_mail
 
 matplotlib.use('Agg')
+import numpy as np
 import matplotlib.pyplot as plt
+
 
 
 def log_experiment(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):

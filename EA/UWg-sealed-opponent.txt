@@ -1,0 +1,7 @@
+This was UWg-sealed-opponent.dckplaying versus:
+GB-sealed-opponent.dck: 1
+UWg-sealed-opponent.dck: 1
+RG-sealed-opponent.dck: 1
+BGw-sealed-opponent.dck: 2
+UR-sealed-opponent.dck: 2
+RW-sealed-opponent.dck: 2
