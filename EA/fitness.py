@@ -12,6 +12,9 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
 
 
 def evaluate_deck_by_wins(individual):
+
+    number_of_matches = len(ct.OPPONENTS) * ct.MATCHES_PER_OPPONENT
+
     decklist = genome_to_decklist(individual)
     filename = "candidate.dck"
     write_decklist(ct.CARD_DIRECTORY + filename, decklist)
@@ -25,5 +28,5 @@ def evaluate_deck_by_wins(individual):
                 result = line.split(' ')
         wins += int(result[3])
         p.wait()
-    fitness = wins
+    fitness = (wins / float(number_of_matches)) * 100
     return fitness,  # MUST BE TUPLE!

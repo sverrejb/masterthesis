@@ -7,7 +7,7 @@ POPSIZE = 10
 DECKSIZE = 40
 CROSSOVER_RATE = 0.1
 MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 200
+NUMBER_OF_GENERATIONS = 400
 MATCHES_PER_OPPONENT = '50'  # must be string!
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
@@ -18,4 +18,5 @@ DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
 OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "UW-sealed-opponent.dck", "BGw-sealed-opponent.dck"]
 EXPERIMENT_TIMESTAMP = datetime.datetime.now().strftime("%d%m%H%M")
 EXPERIMENT_FOLDER = "results/" + EXPERIMENT_TIMESTAMP
+TERMINATION_TRESHOLD = 65
 # CARDS = read_cards_json()

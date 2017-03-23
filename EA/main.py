@@ -103,21 +103,24 @@ def main():
         card_location = ct.EXPERIMENT_FOLDER + "/" + str(gen)
         os.makedirs(card_location)
 
-        counter = 0
-        for solution in population:  # TODO: use enumerate()?
-            write_decklist(card_location + "/" + str(counter) + '.dck', genome_to_decklist(solution))
-            counter += 1
+        for i, solution in enumerate(population):
+            write_decklist(card_location + "/" + str(i) + '.dck', genome_to_decklist(solution))
         fitness_list = [x[0] for x in fits]
         maximum = max(fitness_list)
 
         strongest_individual = tools.selBest(population, k=1)
 
+        median_score = median(fitness_list)
+
         if maximum >= global_maximum:
             global_maximum = maximum
             alpha_deck = strongest_individual
 
+        if median_score >= 65:
+            break
+
         top_list.append(maximum)
-        median_list.append(median(fitness_list))
+        median_list.append(median_score)
         worst_list.append(min(fitness_list))
 
     runtime = (time.time() - start_time)
