@@ -91,6 +91,8 @@ def main():
     worst_list = []
     os.makedirs(ct.EXPERIMENT_FOLDER)
     global_maximum = 0
+    best_median = 0
+    last_improvement = 0
     alpha_deck = []
 
     for gen in range(ct.NUMBER_OF_GENERATIONS):
@@ -111,12 +113,18 @@ def main():
         strongest_individual = tools.selBest(population, k=1)
 
         median_score = median(fitness_list)
+        if median_score > best_median:
+            best_median = median_score
+            last_improvement = gen
 
         if maximum >= global_maximum:
             global_maximum = maximum
             alpha_deck = strongest_individual
 
         if median_score >= 65:
+            break
+
+        if gen - last_improvement > 60:
             break
 
         top_list.append(maximum)
