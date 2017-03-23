@@ -15,24 +15,15 @@ def evaluate_deck_by_wins(individual):
     decklist = genome_to_decklist(individual)
     filename = "candidate.dck"
     write_decklist(ct.CARD_DIRECTORY + filename, decklist)
-    total_damage = 0
     wins = 0
-    # colors,lands = colorsymbols_in_deck(CARDS, decklist)
     for opponent in ct.OPPONENTS:
         cmd = build_cmd(filename, opponent, ct.MATCHES_PER_OPPONENT)
         p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
-            #print(line)
-            # if 'combat damage to Ai(2' in line:
-            #     hit_event = line.split(' ')
-            #     # print(hit_event) #For debugging
-            #     damage_index = hit_event.index('deals') + 1
-            #     damage = int(hit_event[damage_index])
-            #     total_damage += damage
             if 'Match result' in line:
                 result = line.split(' ')
         wins += int(result[3])
         p.wait()
-    fitness = wins  # (wins/float(MATCHES_PER_OPPONENT*len(opponents)))*damage
+    fitness = wins
     return fitness,  # MUST BE TUPLE!

@@ -70,8 +70,9 @@ def mate_individuals(ind1, ind2):
 
 def main():
     # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
-
+    number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
     print('Starting experiment {}'.format(ct.EXPERIMENT_TIMESTAMP))
+    print('Doing {} matches'.format(number_of_matches))
 
     start_time = time.time()
     first_gen_decks = generate_first_generation_decks(ct.CARD_POOL)
