@@ -18,4 +18,5 @@ OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "RG-sealed-opp
              "BGw-sealed-opponent.dck", "UR-sealed-opponent.dck", "RW-sealed-opponent.dck"]
 EXPERIMENT_TIMESTAMP = datetime.datetime.now().strftime("%d%m%H%M")
 EXPERIMENT_FOLDER = "results/" + EXPERIMENT_TIMESTAMP
+TERMINATION_TRESHOLD = 65
 # CARDS = read_cards_json()

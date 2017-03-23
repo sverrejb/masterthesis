@@ -1,5 +1,3 @@
-import datetime
-
 import matplotlib
 
 import constants as ct
@@ -12,12 +10,8 @@ import matplotlib.pyplot as plt
 
 
 def log_experiment(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck):
-    matches_per_generation = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS)
     log_name = ct.EXPERIMENT_TIMESTAMP + '.txt'
     graph_name = ct.EXPERIMENT_TIMESTAMP + '.png'
-    top_list[:] = [(x / float(matches_per_generation)) * 100 for x in top_list]
-    median_list[:] = [(x / float(matches_per_generation)) * 100 for x in median_list]
-    worst_list[:] = [(x / float(matches_per_generation)) * 100 for x in worst_list]
     write_log(top_list, median_list, worst_list, global_maximum, time_to_complete, alpha_deck, log_name)
     write_graph(top_list, median_list, worst_list, graph_name)
     send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'],

@@ -10,6 +10,7 @@ from email.utils import COMMASPACE, formatdate
 
 
 def send_mail(send_to, text, files=[], isTls=True):
+    print('Sending mail')
     msg = MIMEMultipart()
     msg['From'] = 'Deckbuilder'
     msg['To'] = COMMASPACE.join(send_to)
