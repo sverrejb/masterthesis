@@ -126,7 +126,7 @@ def main():
             break
 
         if gen - last_improvement > 60:
-            break
+            breakx
 
         top_list.append(maximum)
         median_list.append(median_score)

@@ -5,9 +5,9 @@ from read_json import read_cards_json
 
 POPSIZE = 10
 DECKSIZE = 40
-CROSSOVER_RATE = 0.1
+CROSSOVER_RATE = 0.5
 MUTATION_RATE = 0.2
-NUMBER_OF_GENERATIONS = 500
+NUMBER_OF_GENERATIONS = 200
 MATCHES_PER_OPPONENT = '50'  # must be string!
 CARD_POOL = read_card_pool('../AER-POOL-1.txt')
 CARD_POOL_SIZE = len(CARD_POOL)
