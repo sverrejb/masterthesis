@@ -1,6 +1,8 @@
+import argparse
 import copy
 import os
 import time
+import sys
 from random import randint
 from statistics import median
 
@@ -68,9 +70,30 @@ def mate_individuals(ind1, ind2):
     return ind1, ind2
 
 
+def parse_arguments():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('-g', '--gens', type=str, help='number of generations')
+    ap.add_argument('-m', '--matches', type=float, help='matches per opponent')
+    args = vars(ap.parse_args())
+
+    if args['gens'] is None:
+        print('Number of generations not specified with -g, using default of 200')
+    else:
+        ct.NUMBER_OF_GENERATIONS = int(args['gens'])
+        print(ct.NUMBER_OF_GENERATIONS)
+
+    if args['matches'] is None:
+        print("Number of matches per opponent not specified with -m, using default of 50")
+    else:
+        ct.MATCHES_PER_OPPONENT = str(int(args['matches']))
+        print(ct.MATCHES_PER_OPPONENT)
+
+
 def main():
-    # TODO: VELG BREEDING OG MUTASJONSSTRATEGI
+
+    parse_arguments()
     number_of_matches = int(ct.MATCHES_PER_OPPONENT) * len(ct.OPPONENTS) * ct.NUMBER_OF_GENERATIONS * ct.POPSIZE
+
     print('Starting experiment {}'.format(ct.EXPERIMENT_TIMESTAMP))
     print('Doing {} matches'.format(number_of_matches))
 
@@ -97,8 +120,10 @@ def main():
 
     for gen in range(ct.NUMBER_OF_GENERATIONS):
         offspring = algorithms.varAnd(population, toolbox, cxpb=ct.CROSSOVER_RATE, mutpb=ct.MUTATION_RATE)
-        fits = list(futures.map(toolbox.evaluate, offspring))
-        print("Generation {}, {}".format(gen, fits))
+
+        offspring_and_matches = [(x, ct.MATCHES_PER_OPPONENT) for x in offspring]
+
+        fits = list(futures.map(toolbox.evaluate, offspring_and_matches))
 
         for fit, ind in zip(fits, offspring):
             ind.fitness.values = fit
@@ -109,11 +134,17 @@ def main():
         for i, solution in enumerate(population):
             write_decklist(card_location + "/" + str(i) + '.dck', genome_to_decklist(solution))
         fitness_list = [x[0] for x in fits]
+
         maximum = max(fitness_list)
 
         strongest_individual = tools.selBest(population, k=1)
 
         median_score = median(fitness_list)
+
+        minimum = min(fitness_list)
+
+        print("Generation {},  max: {}  median: {} min: ".format(gen, median_score, median_score, minimum))
+
         if median_score > best_median:
             best_median = median_score
             last_improvement = gen
@@ -148,4 +179,3 @@ if __name__ == '__main__':
     except Exception as e:
         print("Unexpected error:\n{}".format(e))
         send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'], "The program has crashed:\n{}".format(e))
-
