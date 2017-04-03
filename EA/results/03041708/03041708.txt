@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.7
+Number of generations: 2
+Number of matches pr opponent: 2
+Number of opponents: 6
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck', 'RG-sealed-opponent1.dck', 'BGw-sealed-opponent.dck', 'UR-sealed-opponent.dck', 'RW-sealed-opponent.dck']
+Total number of matches: 240
+Time to complete: 445.8772974014282
+Avg time per match: 1.8578220725059509
+Strongest overall individual: 50.0
+Topscore for each generation:
+50.0, 50.0, 
+Median score for each generation:
+0.0, 0.0, 
+Worst score for each generation: 
+0.0, 0.0, 
+Overall best deck: 
+Deft Dismissal
+Audacious Infiltrator
+Efficient Construction
+Bastion Inventor
+Failed Inspection
+Take into Custody
+Vedalken Blademaster
+Vengeful Rebel
+Cruel Finality
+Fortuitous Find
+Renegade's Getaway
+Kari Zev's Expertise
+scrapper champion
+Embraal Gear-Smasher
+Wrangle
+Elegant Edgecrafters
+Druid of the Cowl
+Unlicensed Disintegration
+Filigree Familiar
+Implement of Combustion
+Plains
+Plains
+Plains
+Island
+Forest
+Mountain
+Island
+Plains
+Island
+Swamp
+Island
+Island
+Forest
+Plains
+Plains
+Island
+Forest
+Plains
+Swamp
+Plains

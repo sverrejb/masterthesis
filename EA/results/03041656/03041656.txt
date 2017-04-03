@@ -1,0 +1,58 @@
+Experiment log:
+Mutation rate: 0.2
+Crossover rate: 0.7
+Number of generations: 2
+Number of matches pr opponent: 2
+Number of opponents: 6
+Opponents: ['GB-sealed-opponent.dck', 'UWg-sealed-opponent.dck', 'RG-sealed-opponent1.dck', 'BGw-sealed-opponent.dck', 'UR-sealed-opponent.dck', 'RW-sealed-opponent.dck']
+Total number of matches: 240
+Time to complete: 462.15056562423706
+Avg time per match: 1.9256273567676545
+Strongest overall individual: 16.666666666666664
+Topscore for each generation:
+8.333333333333332, 16.666666666666664, 
+Median score for each generation:
+0.0, 0.0, 
+Worst score for each generation: 
+0.0, 0.0, 
+Overall best deck: 
+Alley Evasion
+Dawnfeather Eagle
+Revoke Privileges
+Aether Swooper
+Dispersal Technician
+Take into Custody
+Vedalken Blademaster
+Vengeful Rebel
+Fen Hauler
+Chandra, Torch of Defiance
+Freejam Regent
+Kari Zev, Skyship Raider
+Aethertorch Renegade
+Hijack
+Commencement of Festivities
+Druid of the Cowl
+Wily Bandar
+Daredevil Dragster
+Foundry Assembler
+Renegade Freighter
+Verdant Automaton
+Plains
+Mountain
+Swamp
+Mountain
+Forest
+Forest
+Forest
+Island
+Plains
+Island
+Mountain
+Plains
+Mountain
+Island
+Swamp
+Forest
+Island
+Plains
+Swamp
