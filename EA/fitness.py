@@ -28,4 +28,5 @@ def evaluate_deck_by_wins(individual):
         p.wait()
     for i in range(len(ct.OPPONENTS)):
         wins[i] = (wins[i] / float(number_of_matches)) * 100
+    wins = [round(x, 2) for x in wins]
     return tuple(wins)  # MUST BE TUPLE!
