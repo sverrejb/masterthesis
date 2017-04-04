@@ -148,4 +148,3 @@ if __name__ == '__main__':
     except Exception as e:
         print("Unexpected error:\n{}".format(e))
         send_mail(['sverrejb@stud.ntnu.no', 'knutfludal@gmail.com'], "The program has crashed:\n{}".format(e))
-
