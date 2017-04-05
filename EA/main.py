@@ -16,7 +16,7 @@ from fitness import evaluate_deck_by_wins
 from logger import log_experiment
 from mail import send_mail
 
-creator.create("FitnessMax", base.Fitness, weights=(1.0, 1.0, 1.0, 1.0, 1.0, 1.0))
+creator.create("FitnessMax", base.Fitness, weights=(1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMax)
 
 
