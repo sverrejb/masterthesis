@@ -11,16 +11,19 @@ def build_cmd(candidate_name, opponent_name, nr_matches):
             '-n', nr_matches, '-f', 'sealed']
 
 
-def evaluate_deck_by_wins(individual):
+def evaluate_deck_by_wins(data):
 
-    number_of_matches = len(ct.OPPONENTS) * ct.MATCHES_PER_OPPONENT
+    individual = data[0]
+    matches_per_opponent = data[1]
+
+    number_of_matches = len(ct.OPPONENTS) * int(matches_per_opponent)
 
     decklist = genome_to_decklist(individual)
     filename = "candidate.dck"
     write_decklist(ct.CARD_DIRECTORY + filename, decklist)
     wins = 0
     for opponent in ct.OPPONENTS:
-        cmd = build_cmd(filename, opponent, ct.MATCHES_PER_OPPONENT)
+        cmd = build_cmd(filename, opponent, matches_per_opponent)
         p = subprocess.Popen(cmd, cwd=ct.FORGE_PATH, stdout=subprocess.PIPE)
         for line in p.stdout:
             line = line.decode("utf-8").strip()
