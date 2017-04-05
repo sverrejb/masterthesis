@@ -26,5 +26,5 @@ def evaluate_deck_by_wins(individual):
                 result = line.split(' ')
         wins += int(result[3])
         p.wait()
-    fitness = (wins / float(number_of_matches)) * 100
+    fitness = round((wins / float(number_of_matches)) * 100, 3)
     return fitness,  # MUST BE TUPLE!
