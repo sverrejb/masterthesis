@@ -83,7 +83,7 @@ def main():
     toolbox.register("evaluate", evaluate_deck_by_wins)
     toolbox.register("mate", mate_individuals)
     toolbox.register("mutate", mutate_deck)
-    toolbox.register("select", tools.selTournament, tournsize=3)
+    toolbox.register("select", tools.selNSGA2)
 
     population = toolbox.card_population()
     top_list = []
