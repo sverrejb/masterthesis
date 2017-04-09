@@ -14,8 +14,9 @@ CARD_POOL_SIZE = len(CARD_POOL)
 CARD_DIRECTORY = config.CARD_DIR
 FORGE_PATH = config.FORGE_DIR
 DECKLIST_HEADER = '[metadata]\nName=candidate\n[Main]\n'
-OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "RG-sealed-opponent1.dck",
-             "BGw-sealed-opponent.dck", "UR-sealed-opponent.dck", "RW-sealed-opponent.dck"]
+# OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "RG-sealed-opponent1.dck",
+#              "BGw-sealed-opponent.dck", "UR-sealed-opponent.dck", "RW-sealed-opponent.dck"]
+OPPONENTS = ["GB-sealed-opponent.dck", "UWg-sealed-opponent.dck", "BGw-sealed-opponent.dck"]
 EXPERIMENT_TIMESTAMP = datetime.datetime.now().strftime("%d%m%H%M")
 EXPERIMENT_FOLDER = "results/" + EXPERIMENT_TIMESTAMP
 TERMINATION_TRESHOLD = 50
