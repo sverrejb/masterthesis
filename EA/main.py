@@ -111,7 +111,7 @@ def main():
         fitness_list = [x[0] for x in fits]
         maximum = max(fitness_list)
 
-        strongest_individual = tools.selBest(population, k=1)
+        strongest_individual = toolbox.select(population, k=1)
 
         median_score = median(fitness_list)
         if median_score > best_median:
