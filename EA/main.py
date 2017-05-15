@@ -41,7 +41,7 @@ def generate_first_generation_decks(card_pool):
 def card_to_genome(card):
     names = [x[0] for x in ct.CARD_POOL.values()]
     card_int = names.index(card)
-    print(names)
+    card_int = names.index(card)
     return card_int
 
 
@@ -56,7 +56,6 @@ def continiue_generation():
                 genome.append(card_to_genome(card))
 
         decks.append(genome)
-    print(decks)
     return decks
 
 
