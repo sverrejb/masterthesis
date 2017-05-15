@@ -144,11 +144,6 @@ def main():
             global_maximum = maximum
             alpha_deck = strongest_individual
 
-        if median_score >= 65:
-            break
-
-        if gen - last_improvement > 60:
-            break
 
         top_list.append(maximum)
         median_list.append(median_score)
