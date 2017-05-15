@@ -38,6 +38,28 @@ def generate_first_generation_decks(card_pool):
     return population
 
 
+def card_to_genome(card):
+    names = [x[0] for x in ct.CARD_POOL.values()]
+    card_int = names.index(card)
+    print(names)
+    return card_int
+
+
+def continiue_generation():
+    decks = []
+    for filename in os.listdir("seed"):
+        genome = []
+        with open("seed/"+filename, 'r') as file:
+            lines = [line.strip() for line in file.readlines()]
+            deckfile = lines[3:44]
+            for card in deckfile:
+                genome.append(card_to_genome(card))
+
+        decks.append(genome)
+    print(decks)
+    return decks
+
+
 def mutate_deck(individual):
     size = len(individual)
     mutation_site = randint(0, size - 1)
@@ -75,7 +97,7 @@ def main():
     print('Doing {} matches'.format(number_of_matches))
 
     start_time = time.time()
-    first_gen_decks = generate_first_generation_decks(ct.CARD_POOL)
+    first_gen_decks = continiue_generation()
 
     toolbox = base.Toolbox()
     toolbox.register("individual_deck", init_individual, creator.Individual)
