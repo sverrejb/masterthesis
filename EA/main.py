@@ -41,7 +41,6 @@ def generate_first_generation_decks(card_pool):
 def card_to_genome(card):
     names = [x[0] for x in ct.CARD_POOL.values()]
     card_int = names.index(card)
-    card_int = names.index(card)
     return card_int
 
 
